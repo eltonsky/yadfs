@@ -8,6 +8,7 @@
 #include <string>
 #include <boost/asio.hpp>
 #include "Writable.h"
+#include "Utils.h"
 
 using boost::asio::ip::tcp;
 using namespace std;
@@ -22,6 +23,7 @@ class IntWritable : public Writable
         virtual int readFields(tcp::socket * sock);
         virtual int write(tcp::socket * sock);
         virtual string toString();
+        virtual unsigned char* toBytes();
         virtual string printToString();
         virtual string getClass();
         inline int get() {return _value;}

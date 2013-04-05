@@ -48,4 +48,4 @@ string StringWritable::toString() {
 }
 
 
-
+unsigned char* StringWritable::toBytes() {return NULL;}

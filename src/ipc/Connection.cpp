@@ -31,7 +31,7 @@ namespace Server{
             tcp::socket* sock = _sock.get();
 
             size_t wrote = 0;
-            size_t length = call->getValueStr().length();
+            size_t length = sizeof(call->getValueBuf());
             size_t curr_pos = call->getPos();
             size_t left = length - curr_pos;
 
@@ -49,7 +49,7 @@ namespace Server{
                 }
             }
 
-            const char* start = call->getValueStr().c_str() + curr_pos;
+            const unsigned char* start = call->getValueBuf() + curr_pos;
 
             Log::write(DEBUG,
                        "Connection::processResponse : call id %d, length %d, curr_pos %d, value %s\n",

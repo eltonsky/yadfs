@@ -109,6 +109,9 @@ string MethodWritable::getClass() {
 }
 
 
+unsigned char* MethodWritable::toBytes() {return NULL;}
+
+
 MethodWritable::~MethodWritable()
 {
     //dtor

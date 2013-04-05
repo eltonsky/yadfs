@@ -8,6 +8,8 @@ IntWritable::IntWritable(int v) : _value(v)
 }
 
 
+/// NOTE: write & readFields need to be able to read bytes if this Writable
+/// can be used as a value.
 int IntWritable::readFields(tcp::socket * sock) {
     if(sock == NULL)
         return -1;
@@ -31,8 +33,7 @@ int IntWritable::readFields(tcp::socket * sock) {
     buf[length] = '\0';
 
     //convert
-    _value = *reinterpret_cast<const char*>(buf.get());
-
+    _value = Utils::bitsToInt(buf.get());
 
     return l;
 }
@@ -69,9 +70,12 @@ string IntWritable::printToString() {
 
 
 string IntWritable::toString() {
-    stringbuf sb;
-    sb.sputn((const char*)&_value, sizeof(_value));
-    return sb.str();
+    return std::to_string(_value);
+}
+
+
+unsigned char* IntWritable::toBytes() {
+    return reinterpret_cast<unsigned char*>(&_value);
 }
 
 

@@ -62,20 +62,21 @@ namespace Server {
     }
 
 
+    ///@decprecated : use connection::processResponse instead.
     bool Call::write() {
 
-        try{
-            tcp::socket* sock = _connection->getSock().get();
-
-            boost::asio::write(*sock, boost::asio::buffer((const char*)&_call_id, sizeof(_call_id)));
-
-            Writable::writeString(sock, _strVal);
-        }
-         catch(exception& e) {
-            Log::write(ERROR, "Exception when write a call result <%s : %s> : %s \n",
-                       toString().c_str(), _strVal.c_str(), e.what());
-            return false;
-        }
+//        try{
+//            tcp::socket* sock = _connection->getSock().get();
+//
+//            boost::asio::write(*sock, boost::asio::buffer((const char*)&_call_id, sizeof(_call_id)));
+//
+//            Writable::writeString(sock, _strVal);
+//        }
+//         catch(exception& e) {
+//            Log::write(ERROR, "Exception when write a call result <%s : %s> : %s \n",
+//                       toString().c_str(), _strVal.c_str(), e.what());
+//            return false;
+//        }
 
         return true;
     }

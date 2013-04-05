@@ -21,6 +21,7 @@ class MethodWritable : public Writable
         virtual string toString();
         virtual string printToString();
         virtual string getClass();
+        virtual unsigned char* toBytes();
 
     protected:
     private:

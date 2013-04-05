@@ -21,7 +21,8 @@ shared_ptr<Writable> Method::call(string c, string m, vector<shared_ptr<Writable
             NameNode nn;
 
             return nn.create(dynamic_pointer_cast<StringWritable>(params[0]),
-                             dynamic_pointer_cast<IntWritable>(params[1]));
+                             dynamic_pointer_cast<IntWritable>(params[1]),
+                             dynamic_pointer_cast<Permission>(params[2]));
         }
     }
 
@@ -34,7 +35,10 @@ shared_ptr<Writable> Method::getNewInstance(string class_) {
         return shared_ptr<Writable>(new IntWritable());
     } else if(class_ == "MethodWritable"){
         return shared_ptr<Writable>(new MethodWritable());
-
+    } else if(class_ == "StringWritable"){
+        return shared_ptr<Writable>(new StringWritable());
+    } else if(class_ == "Permission"){
+        return shared_ptr<Writable>(new Permission());
     }
 
     return shared_ptr<Writable>(new Writable());

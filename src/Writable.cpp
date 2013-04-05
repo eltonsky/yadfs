@@ -18,6 +18,8 @@ string Writable::toString() {return NULL;}
 
 string Writable::printToString() {return NULL;}
 
+unsigned char* Writable::toBytes() {return NULL;}
+
 
 int Writable::writeString(tcp::socket*sock, string str) {
     int length = str.size();
@@ -73,7 +75,6 @@ string Writable::readString(tcp::socket * sock){
 
 
 string Writable::getClass() { return "Writable"; }
-
 
 
 

@@ -10,6 +10,9 @@ class Utils
         virtual ~Utils();
 
         static const long getTime();
+
+        static int bitsToInt(char*,  bool little_endian = true );
+
     protected:
     private:
 };
