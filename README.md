@@ -15,7 +15,7 @@ The class diagram and work flow are drawn using umbrello.
 
 
 NOTE: You are veeeeeery welcomed to join this project. to critisize my work, to discuss design or code, or to contribute
-you ideas. 
+you ideas.
 
 
 Elton
