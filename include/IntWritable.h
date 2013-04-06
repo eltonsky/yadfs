@@ -20,12 +20,15 @@ class IntWritable : public Writable
         IntWritable(const Writable&);
         IntWritable(int v);
         virtual ~IntWritable();
+
         virtual int readFields(tcp::socket * sock);
-        virtual int write(tcp::socket * sock);
+        virtual int write(tcp::socket * sock, int start=0);
         virtual string toString();
         virtual unsigned char* toBytes();
         virtual string printToString();
         virtual string getClass();
+        virtual int length();
+
         inline int get() {return _value;}
 
     protected:

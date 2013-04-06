@@ -74,7 +74,7 @@ int Permission::readFields(tcp::socket * sock) {
 }
 
 
-int Permission::write(tcp::socket * sock){
+int Permission::write(tcp::socket * sock, int start){
 
     if(sock == NULL)
         return -1;
@@ -115,7 +115,7 @@ string Permission::getClass() {
 
 unsigned char* Permission::toBytes() {return NULL;}
 
-
+int Permission::length() {return 0;}
 
 
 

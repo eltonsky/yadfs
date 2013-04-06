@@ -55,7 +55,7 @@ void Test2::test211(string server_host, int port, int rep) {
 
         shared_ptr<Permission> perm = make_shared<Permission>("elton", "yadfsGroup", 777);
 
-        int res = dfsClient.create("block_2345", 3, perm);
+        int res = dfsClient.create("block_1234567", 3, perm);
 
         Log::write(INFO, "In thread %ld : %d #### CLIENT RESULT : %d\n" ,
                     (long int)syscall(SYS_gettid), i , res);

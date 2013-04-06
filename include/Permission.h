@@ -19,7 +19,7 @@ class Permission : public Writable
         void write(ostream*);
 
         virtual int readFields(tcp::socket * sock);
-        virtual int write(tcp::socket * sock);
+        virtual int write(tcp::socket * sock, int start=0);
 
         string getUserName() {return _userName;}
         string getGroupName() {return _groupName;}
@@ -34,6 +34,8 @@ class Permission : public Writable
         virtual string getClass();
 
         virtual unsigned char* toBytes();
+
+        virtual int length();
 
     protected:
         string _userName;

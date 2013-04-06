@@ -27,9 +27,15 @@ namespace Server {
                 return -1;
             }
 
+Log::write(DEBUG, "#### 1\n");
+
             _class = Writable::readString(sock);
 
+Log::write(DEBUG, "#### 2\n");
+
             _method = Writable::readString(sock);
+
+Log::write(DEBUG, "#### 3\n");
 
             //params
             size_t size = -1;
@@ -42,9 +48,15 @@ namespace Server {
                 return -1;
             }
 
+
+Log::write(DEBUG, "#### 4, _params.size %d\n", size);
+
             _params.reserve(size);
 
             for(size_t i =0; i < size; i++) {
+
+Log::write(DEBUG, "#### 5, i %d\n", i);
+
                 string param_class = Writable::readString(sock);
 
                 _params.push_back(Method::getNewInstance(param_class));

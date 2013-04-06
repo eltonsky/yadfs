@@ -12,7 +12,7 @@ Writable::~Writable()
 
 int Writable::readFields(tcp::socket * sock) {return 0;}
 
-int Writable::write(tcp::socket * sock) {return 0;}
+int Writable::write(tcp::socket * sock, int start) {return 0;}
 
 string Writable::toString() {return NULL;}
 
@@ -20,21 +20,23 @@ string Writable::printToString() {return NULL;}
 
 unsigned char* Writable::toBytes() {return NULL;}
 
+int Writable::length() {return -1;}
+
 
 int Writable::writeString(tcp::socket*sock, string str) {
-    int length = str.size();
+    size_t length = str.size();
 
     if(sock == NULL || length == 0)
         return 0;
 
-    size_t l = boost::asio::write(*sock, boost::asio::buffer((const char*)&length, sizeof(length)));
+    boost::asio::write(*sock, boost::asio::buffer((const char*)&length, sizeof(length)));
 
-    Log::write(DEBUG, "writeString : length of length %d\n", l);
+    Log::write(DEBUG, "writeString : length is %d\n", length);
 
     size_t send_length =
         boost::asio::write(*sock, boost::asio::buffer(str.c_str(), str.size()));
 
-    Log::write(DEBUG, "writeString : write %s length %d\n", str.c_str(), send_length);
+    Log::write(DEBUG, "writeString : write %s, send length %d\n", str.c_str(), send_length);
 
     return send_length;
 }
@@ -44,12 +46,12 @@ string Writable::readString(tcp::socket * sock){
     if(sock == NULL)
         return NULL;
 
-    int length = -1;
+    size_t length = -1;
 
-    size_t l = boost::asio::read(*sock,
+    boost::asio::read(*sock,
             boost::asio::buffer(&length, sizeof(length)));
 
-    Log::write(DEBUG, "readString : length of length %d\n", l);
+    Log::write(DEBUG, "readString : length is %d\n", length);
 
     if(length > 0) {
 
@@ -62,9 +64,10 @@ string Writable::readString(tcp::socket * sock){
         if(reply_length > 0) {
             char_str[reply_length] = '\0';
 
-            Log::write(DEBUG, "readString : %s, length %d\n", char_str.get(), reply_length);
-
             string str(char_str.get());
+
+            Log::write(DEBUG, "readString : %s, reply length %d\n",
+                       char_str.get(), reply_length);
 
             return str;
         }

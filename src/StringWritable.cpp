@@ -17,13 +17,25 @@ StringWritable::~StringWritable()
 }
 
 
-int StringWritable::write(tcp::socket * sock) {
+int StringWritable::write(tcp::socket * sock, int start_pos) {
+
     if(sock == NULL)
         return -1;
 
-    size_t length = Writable::writeString(sock, _value);
+    size_t length = _value.length();
 
-    return length;
+    // if start_pos is 0, assume length has not been passed
+    if (start_pos == 0) {
+
+        boost::asio::write(*sock, boost::asio::buffer((const char*)&length, sizeof(length)));
+    }
+
+    const char* start = _value.c_str() + start_pos;
+    size_t left = length - start_pos;
+
+    size_t wrote = sock->write_some(boost::asio::buffer(start, left));
+
+    return wrote;
 }
 
 
@@ -49,3 +61,10 @@ string StringWritable::toString() {
 
 
 unsigned char* StringWritable::toBytes() {return NULL;}
+
+int StringWritable::length() {
+    return _value.length();
+}
+
+
+

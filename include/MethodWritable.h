@@ -17,11 +17,12 @@ class MethodWritable : public Writable
         virtual ~MethodWritable();
 
         virtual int readFields(tcp::socket * sock);
-        virtual int write(tcp::socket * sock);
+        virtual int write(tcp::socket * sock, int start=0);
         virtual string toString();
         virtual string printToString();
         virtual string getClass();
         virtual unsigned char* toBytes();
+        virtual int length();
 
     protected:
     private:
