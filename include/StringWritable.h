@@ -29,8 +29,6 @@ class StringWritable : public Writable
 
         inline string get() {return _value;}
 
-        virtual unsigned char* toBytes();
-
         virtual int length();
 
     protected:

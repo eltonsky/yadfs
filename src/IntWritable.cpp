@@ -56,11 +56,6 @@ string IntWritable::toString() {
 }
 
 
-unsigned char* IntWritable::toBytes() {
-    return reinterpret_cast<unsigned char*>(&_value);
-}
-
-
 string IntWritable::getClass(){
     return "IntWritable";
 }
@@ -75,3 +70,6 @@ IntWritable::~IntWritable()
 {
     //dtor
 }
+
+
+

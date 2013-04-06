@@ -24,9 +24,6 @@ class Writable
         // write private values to strstream
         virtual string toString();
 
-        // byte array
-        virtual unsigned char* toBytes();
-
         // print private values for test
         virtual string printToString();
         virtual string getClass();

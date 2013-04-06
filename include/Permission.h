@@ -33,8 +33,6 @@ class Permission : public Writable
 
         virtual string getClass();
 
-        virtual unsigned char* toBytes();
-
         virtual int length();
 
     protected:

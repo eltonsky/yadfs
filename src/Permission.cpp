@@ -113,9 +113,12 @@ string Permission::getClass() {
 }
 
 
-unsigned char* Permission::toBytes() {return NULL;}
-
 int Permission::length() {return 0;}
+
+
+
+
+
 
 
 

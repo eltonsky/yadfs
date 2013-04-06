@@ -24,7 +24,6 @@ class IntWritable : public Writable
         virtual int readFields(tcp::socket * sock);
         virtual int write(tcp::socket * sock, int start=0);
         virtual string toString();
-        virtual unsigned char* toBytes();
         virtual string printToString();
         virtual string getClass();
         virtual int length();

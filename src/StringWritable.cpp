@@ -60,8 +60,6 @@ string StringWritable::toString() {
 }
 
 
-unsigned char* StringWritable::toBytes() {return NULL;}
-
 int StringWritable::length() {
     return _value.length();
 }

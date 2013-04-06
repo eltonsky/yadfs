@@ -18,8 +18,6 @@ string Writable::toString() {return NULL;}
 
 string Writable::printToString() {return NULL;}
 
-unsigned char* Writable::toBytes() {return NULL;}
-
 int Writable::length() {return -1;}
 
 

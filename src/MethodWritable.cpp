@@ -17,17 +17,11 @@ int MethodWritable::readFields(tcp::socket * sock) {
 
     try{
 
-Log::write(DEBUG, "##- 1\n");
-
         //class
         _class_name = Writable::readString(sock);
 
-Log::write(DEBUG, "##- 2\n");
-
         //method
         _method_name = Writable::readString(sock);
-
-
 
         //params
         size_t size = -1;
@@ -40,12 +34,8 @@ Log::write(DEBUG, "##- 2\n");
             return -1;
         }
 
-Log::write(DEBUG, "##- 3, _params.size %d\n", size);
-
         _params.reserve(size);
         for(size_t i =0; i < size; i++) {
-
-Log::write(DEBUG, "##- 4, i %d\n", i);
 
             string param_class = Writable::readString(sock);
 
@@ -69,16 +59,11 @@ int MethodWritable::write(tcp::socket * sock, int start){
         return -1;
 
     try{
-
-Log::write(DEBUG, "## 1\n");
         //class
         Writable::writeString(sock, _class_name);
 
-Log::write(DEBUG, "## 2\n");
-
         //method
         Writable::writeString(sock, _method_name);
-Log::write(DEBUG, "## 3\n");
 
         //params
         size_t size = _params.size();
@@ -92,8 +77,6 @@ Log::write(DEBUG, "## 3\n");
 
         for(size_t i =0; i < size; i++) {
             Writable::writeString(sock, _params[i]->getClass());
-
-Log::write(DEBUG, "## write clazz %s\n",_params[i]->getClass().c_str());
 
             _params[i]->write(sock);
         }
@@ -126,9 +109,6 @@ string MethodWritable::printToString() {
 string MethodWritable::getClass() {
     return "MethodWritable";
 }
-
-
-unsigned char* MethodWritable::toBytes() {return NULL;}
 
 
 int MethodWritable::length() {return -1;}
