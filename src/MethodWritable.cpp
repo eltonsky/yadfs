@@ -16,6 +16,7 @@ int MethodWritable::readFields(tcp::socket * sock) {
         return -1;
 
     try{
+
         //class
         _class_name = Writable::readString(sock);
 
@@ -35,6 +36,7 @@ int MethodWritable::readFields(tcp::socket * sock) {
 
         _params.reserve(size);
         for(size_t i =0; i < size; i++) {
+
             string param_class = Writable::readString(sock);
 
             _params.push_back(Method::getNewInstance(param_class));
@@ -51,7 +53,7 @@ int MethodWritable::readFields(tcp::socket * sock) {
 }
 
 
-int MethodWritable::write(tcp::socket * sock){
+int MethodWritable::write(tcp::socket * sock, int start){
 
     if(sock == NULL)
         return -1;
@@ -107,6 +109,9 @@ string MethodWritable::printToString() {
 string MethodWritable::getClass() {
     return "MethodWritable";
 }
+
+
+int MethodWritable::length() {return -1;}
 
 
 MethodWritable::~MethodWritable()

@@ -41,11 +41,12 @@ namespace Server{
             inline const vector<shared_ptr<Writable>> getParams() const {return _params;}
 
             inline void setValue(shared_ptr<Writable> v) {
-                _strVal = v->toString();
                 _value = v;
+
+                Log::write(DEBUG, "after set value, _value : %s\n",
+                           _value->printToString().c_str());
             }
 
-            inline const string getValueStr() const {return _strVal;}
             inline const shared_ptr<Writable> getValue() const {return _value;}
             inline const tcp::socket* getSock() const {return _connection->getSock().get();}
             inline void setConnection(shared_ptr<Connection> conn) {_connection = conn;}
@@ -65,7 +66,6 @@ namespace Server{
             vector<shared_ptr<Writable>> _params;
             shared_ptr<Writable> _value;
             int _pos = 0; // the pos to start writing again, for a async mode
-            string _strVal;
     };
 
 }

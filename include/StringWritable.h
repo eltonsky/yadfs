@@ -20,15 +20,16 @@ class StringWritable : public Writable
         StringWritable(string);
         virtual ~StringWritable();
 
-
         virtual int readFields(tcp::socket * sock);
-        virtual int write(tcp::socket * sock);
+        virtual int write(tcp::socket * sock, int start=0);
         virtual string toString();
         virtual string printToString();
 
         virtual inline string getClass() {return "StringWritable";}
 
         inline string get() {return _value;}
+
+        virtual int length();
 
     protected:
     private:

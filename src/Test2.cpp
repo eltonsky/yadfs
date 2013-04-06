@@ -11,7 +11,7 @@ Test2::~Test2()
 }
 
 
-void Test2::test21(string server_host, int port, int rep) {
+void Test2::test201(string server_host, int port, int rep) {
 
     DataNodeProtocol namenode(server_host, port);
 
@@ -36,7 +36,7 @@ bool Test2::test20(string server_host, int port, int thread, int rep) {
     vector<boost::thread> ts(thread);
 
     for(int i =0; i < thread; i++) {
-        ts[i] = boost::thread(boost::bind(&Test2::test21, this, server_host, port, rep));
+        ts[i] = boost::thread(boost::bind(&Test2::test201, this, server_host, port, rep));
     }
 
     for(int i =0; i < thread; i++) {
@@ -45,3 +45,39 @@ bool Test2::test20(string server_host, int port, int thread, int rep) {
 
     return true;
 }
+
+
+void Test2::test211(string server_host, int port, int rep) {
+
+    DFSClient dfsClient(server_host, port);
+
+    for(int i = 0 ; i < rep; i++) {
+
+        shared_ptr<Permission> perm = make_shared<Permission>("elton", "yadfsGroup", 777);
+
+        int res = dfsClient.create("block_1234567", 3, perm);
+
+        Log::write(INFO, "In thread %ld : %d #### CLIENT RESULT : %d\n" ,
+                    (long int)syscall(SYS_gettid), i , res);
+
+    }
+}
+
+
+bool Test2::test21(string server_host, int port, int thread, int rep) {
+    vector<boost::thread> ts(thread);
+
+    for(int i =0; i < thread; i++) {
+        ts[i] = boost::thread(boost::bind(&Test2::test211, this, server_host, port, rep));
+    }
+
+    for(int i =0; i < thread; i++) {
+        ts[i].join();
+    }
+
+    return true;
+}
+
+
+
+
