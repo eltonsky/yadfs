@@ -3,7 +3,7 @@
 #include <pthread.h>
 #include <sys/types.h>
 #include <sys/syscall.h>
-#include <unistd.h>
+#include "Config.h"
 #include "log4cpp/Category.hh"
 #include "log4cpp/Appender.hh"
 #include "log4cpp/FileAppender.hh"
@@ -24,8 +24,10 @@ class Log
     public:
         Log();
         virtual ~Log();
+        static void init(string clazz);
 
-        static void init(string conf);
+        static shared_ptr<Log> get();
+
         static void write(string msg);
         static void write(LogLevel level, string msg);
         static void write(const char*, ...);
@@ -43,6 +45,11 @@ class Log
         static inline void getString(const char* fommat, va_list va, string&);
 
     private:
+        static shared_ptr<Log> _log;
+
+        static bool _initialized;
 };
+
+
 
 #endif // LOG_H

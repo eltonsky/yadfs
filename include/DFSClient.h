@@ -5,6 +5,7 @@
 #include "StringWritable.h"
 #include "ClientProtocol.h"
 #include "Permission.h"
+#include "Log.h"
 
 class DFSClient
 {

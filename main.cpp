@@ -80,19 +80,17 @@ int main(int argc, char** argv)
     try {
 
         if(!ifServer) {
-            // init log
-            Log::init(Config::get("base.log.conf.rpc.client"));
 
 //            Test1 t1;
 //            t1.test2(server_host, port, 1, 1);
 
-
             Test2 t2;
-            t2.test21(server_host, port, 4, 1);
+            t2.test21(server_host, port, 4, 50);
 
         } else {
+            /// Move Log::init to NameNode class
             // init log
-            Log::init(Config::get("base.log.conf.rpc.server"));
+            Log::init("NameNode");
 
             signal(SIGINT, terminate);
 

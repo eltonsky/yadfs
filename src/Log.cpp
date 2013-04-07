@@ -1,10 +1,30 @@
 #include "Log.h"
 
-void Log::init(string confFile)
-{
-    string initFileName = confFile;
+bool Log::_initialized = false;
 
-	log4cpp::PropertyConfigurator::configure(initFileName);
+
+void Log::init(string clazz)
+{
+    if(!_initialized) {
+        if(clazz == "FSNameSystem" ||
+           clazz == "NameNode") {
+
+            log4cpp::PropertyConfigurator::configure(Config::get("base.log.conf.rpc.server"));
+
+        } else if(clazz == "DataNode" ||
+           clazz == "DFSClient") {
+
+            log4cpp::PropertyConfigurator::configure(Config::get("base.log.conf.rpc.client"));
+
+        } else {
+
+            stringstream ss;
+            ss << "Can not find clazz "<<clazz;
+            throw ss.str();
+        }
+
+        _initialized = true;
+    }
 }
 
 

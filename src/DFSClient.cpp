@@ -1,16 +1,16 @@
 #include "DFSClient.h"
 
-
 DFSClient::DFSClient()
 {
+    // init log
+    Log::init("DFSClient");
 }
 
 
 ///TODO:pick up server ep from config
 DFSClient::DFSClient(string server, int port) : _namenode(server, port)
 {
-
-
+    DFSClient();
 }
 
 
