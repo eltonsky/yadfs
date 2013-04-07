@@ -8,29 +8,47 @@
 #include <thread>
 #include <memory>
 #include "Log.h"
+#include "DataNodeProtocol.h"
 #include "ClientProtocol.h"
+#include "ipc/Server.h"
 
-
-class NameNode : public ClientProtocol {
+class NameNode : public DataNodeProtocol, public ClientProtocol {
 
 public:
+
+    static NameNode& getInstance()
+    {
+        static NameNode instance;
+
+        return instance;
+    }
 
     NameNode();
     ~NameNode();
 
+    void start();
+
+    void close();
+
+
+    inline IPC::Server* getRpcServer() {return &_rpcServer;}
+
+
     virtual shared_ptr<Writable> create(shared_ptr<StringWritable> path,
-                                        shared_ptr<IntWritable> replication,
-                                        shared_ptr<Permission> perm) {
-        int res = 12345;
+                                            shared_ptr<IntWritable> rep,
+                                            shared_ptr<Permission> perm);
 
-        Log::write(INFO, "Creating file <path:%s> <rep:%d>  <perm:%s>",
-                   path->printToString().c_str(), replication->get(),
-                   perm->printToString().c_str());
+    /// TODO: add more functions
 
-        return make_shared<IntWritable>(res);
-    }
+    private:
 
-    //...
+        IPC::Server _rpcServer;
+
+
+
+        NameNode(NameNode const&);
+        void operator=(NameNode const&);
+
 
 };
 

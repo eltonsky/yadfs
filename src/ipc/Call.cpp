@@ -1,6 +1,6 @@
 #include "Call.h"
 
-namespace Server {
+namespace IPC {
     const int recheck_interval = 100;
 
     ////Call

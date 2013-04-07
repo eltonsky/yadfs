@@ -17,10 +17,9 @@ shared_ptr<Writable> Method::call(string c, string m, vector<shared_ptr<Writable
         }
     } else if(c == "NameNode") {
         if(m == "create") {
-            /// For test ...
-            NameNode nn;
 
-            return nn.create(dynamic_pointer_cast<StringWritable>(params[0]),
+            return NameNode::getInstance().create(
+                            dynamic_pointer_cast<StringWritable>(params[0]),
                              dynamic_pointer_cast<IntWritable>(params[1]),
                              dynamic_pointer_cast<Permission>(params[2]));
         }

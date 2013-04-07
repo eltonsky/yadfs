@@ -18,13 +18,14 @@
 #include "Config.h"
 #include "Log.h"
 #include "MethodWritable.h"
+#include "NameNode.h"
 #include "Test1.h"
 #include "Test2.h"
 
 using boost::asio::ip::tcp;
 using namespace std;
 
-Server::Server* server_ptr;
+IPC::Server* server_ptr;
 atomic<bool> teminated(false);
 
 void terminate(int signum) {
@@ -51,8 +52,6 @@ void terminate(int signum) {
 int main(int argc, char** argv)
 {
     bool ifServer = true;
-    string server_host;
-    int port = -1;
 
     ///load config
     Config::load();
@@ -65,12 +64,8 @@ int main(int argc, char** argv)
     } else if(strcmp(argv[1],"-c") == 0) {
 
         ifServer = false;
-        server_host = Config::get("dfs.namenode.ip");
-        port = atoi(Config::get("dfs.namenode.port").c_str());
 
     } else if (strcmp(argv[1], "-s") ==0) {
-
-        port = atoi(Config::get("dfs.namenode.port").c_str());
 
     } else {
         cout<< "Unrecognized type '" << argv[1]<<"'"<<endl;
@@ -81,24 +76,18 @@ int main(int argc, char** argv)
 
         if(!ifServer) {
 
-//            Test1 t1;
-//            t1.test2(server_host, port, 1, 1);
-
             Test2 t2;
-            t2.test21(server_host, port, 4, 50);
+            t2.test21(Config::get("dfs.namenode.ip"),
+                      Config::getInt("dfs.namenode.port"),
+                      4, 50);
 
         } else {
-            /// Move Log::init to NameNode class
-            // init log
-            Log::init("NameNode");
 
             signal(SIGINT, terminate);
 
-            Server::Server serv(port);
+            server_ptr = NameNode::getInstance().getRpcServer();
 
-            server_ptr = &serv;
-
-            serv.start();
+            NameNode::getInstance().start();
         }
 
     }  catch(exception& e) {

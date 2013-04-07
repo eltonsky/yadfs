@@ -92,6 +92,7 @@
 		<Unit filename="src/ipc/RPC.cpp" />
 		<Unit filename="src/ipc/Responder.cpp" />
 		<Unit filename="src/ipc/Server.cpp" />
+		<Unit filename="src/tinyxml2.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

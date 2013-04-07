@@ -1,6 +1,6 @@
 #include "Server.h"
 
-namespace Server {
+namespace IPC {
 
     Server::Server(int port) : _listener(port), _responder()
     {

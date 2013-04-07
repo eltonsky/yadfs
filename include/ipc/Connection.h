@@ -14,7 +14,7 @@
 #include "BlockQueue.h"
 #include "Utils.h"
 
-namespace Server {
+namespace IPC {
     class Call;
 
     extern int _last_connection_index;

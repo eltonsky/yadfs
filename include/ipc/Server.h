@@ -5,7 +5,7 @@
 #include "Handler.h"
 #include "Responder.h"
 
-namespace Server{
+namespace IPC{
 
     const short num_handlers = 2;
 

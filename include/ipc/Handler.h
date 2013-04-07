@@ -8,7 +8,7 @@
 #include "Method.h"
 #include "Responder.h"
 
-namespace Server{
+namespace IPC{
 
     extern BlockQueue<std::shared_ptr<Call>> _bq_call;
 
