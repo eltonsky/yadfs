@@ -22,9 +22,6 @@
 #include "Test1.h"
 #include "Test2.h"
 
-using boost::asio::ip::tcp;
-using namespace std;
-
 IPC::Server* server_ptr;
 atomic<bool> teminated(false);
 
