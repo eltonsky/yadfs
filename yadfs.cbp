@@ -43,6 +43,7 @@
 		</Compiler>
 		<Unit filename="include/BlockQueue.h" />
 		<Unit filename="include/ClientProtocol.h" />
+		<Unit filename="include/Config.h" />
 		<Unit filename="include/DFSClient.h" />
 		<Unit filename="include/DataNodeProtocol.h" />
 		<Unit filename="include/IntWritable.h" />
@@ -68,6 +69,7 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="src/BlockQueue.cpp" />
 		<Unit filename="src/ClientProtocol.cpp" />
+		<Unit filename="src/Config.cpp" />
 		<Unit filename="src/DFSClient.cpp" />
 		<Unit filename="src/DataNodeProtocol.cpp" />
 		<Unit filename="src/IntWritable.cpp" />

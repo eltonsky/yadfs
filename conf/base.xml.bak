@@ -1,0 +1,10 @@
+<base>
+	<log>
+		<conf>
+			<rpc>
+				<server>./conf/rpc_serv.properties</server>
+				<client>./conf/rpc_client.properties</client>
+			</rpc>
+		</conf>
+	</log>
+</base>

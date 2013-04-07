@@ -1,0 +1,17 @@
+<dfs>
+	<imgFile>
+                <path>./image/current/fsimage</path>
+                <version>0.1</version>
+        </imgFile>
+        <editLog>
+                <path>./image/current/edits</path>
+        </editLog>
+        <checkpoint>
+                <period>5</period>
+                <size>64</size>
+        </checkpoint>
+        <namenode>
+		<ip>localhost</ip>
+                <port>1234</port>
+        </namenode>
+</dfs>

@@ -15,6 +15,7 @@
 #include "Utils.h"
 #include "Server.h"
 #include "Client.h"
+#include "Config.h"
 #include "Log.h"
 #include "MethodWritable.h"
 #include "Test1.h"
@@ -25,8 +26,6 @@ using namespace std;
 
 Server::Server* server_ptr;
 atomic<bool> teminated(false);
-const string server_log_conf = "./conf/server.properties";
-const string client_log_conf = "./conf/client.properties";
 
 void terminate(int signum) {
     if(signum == SIGINT && teminated == false) {
@@ -55,6 +54,8 @@ int main(int argc, char** argv)
     string server_host;
     int port = -1;
 
+    ///load config
+    Config::load();
 
     if (argc < 2)
     {
@@ -62,22 +63,15 @@ int main(int argc, char** argv)
         return -1;
 
     } else if(strcmp(argv[1],"-c") == 0) {
-        if (argc < 4) {
-            cout<<"Client Usage: ./bin <type> <server_host> <port>"<<endl;
-            return -1;
-        }
 
         ifServer = false;
-        server_host = string(argv[2]);
-        port = atoi(argv[3]);
+        server_host = Config::get("dfs.namenode.ip");
+        port = atoi(Config::get("dfs.namenode.port").c_str());
 
     } else if (strcmp(argv[1], "-s") ==0) {
-        if(argc < 3) {
-            cout<<"Server Usage: ./bin <type> <port>"<<endl;
-            return -1;
-        }
 
-        port = atoi(argv[2]);
+        port = atoi(Config::get("dfs.namenode.port").c_str());
+
     } else {
         cout<< "Unrecognized type '" << argv[1]<<"'"<<endl;
         return -1;
@@ -86,9 +80,8 @@ int main(int argc, char** argv)
     try {
 
         if(!ifServer) {
-
             // init log
-            Log::init(client_log_conf);
+            Log::init(Config::get("base.log.conf.rpc.client"));
 
 //            Test1 t1;
 //            t1.test2(server_host, port, 1, 1);
@@ -98,9 +91,8 @@ int main(int argc, char** argv)
             t2.test21(server_host, port, 4, 1);
 
         } else {
-
             // init log
-            Log::init(server_log_conf);
+            Log::init(Config::get("base.log.conf.rpc.server"));
 
             signal(SIGINT, terminate);
 
