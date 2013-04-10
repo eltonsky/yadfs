@@ -33,23 +33,25 @@ Permission::~Permission()
 }
 
 
-//void Permission::readFields(istream* is) {
-//    _userName = Writable::readString(is);
-//
-//    _groupName = Writable::readString(is);
-//
-//    is->read((char*)&_perm, sizeof(_perm));
-//}
-//
-//
-//void Permission::write(ostream* os) {
-//
-//    Writable::writeString(os, _userName);
-//
-//    Writable::writeString(os, _groupName);
-//
-//    os->write((char*)&_perm, sizeof(_perm));
-//}
+void Permission::readFields(istream* is) {
+    _userName = Writable::readString(is);
+
+    _groupName = Writable::readString(is);
+
+    is->read(reinterpret_cast<char *>(&_perm),
+              sizeof(_perm));
+}
+
+
+void Permission::write(ostream* os) {
+
+    Writable::writeString(os, _userName);
+
+    Writable::writeString(os, _groupName);
+
+    os->write(reinterpret_cast<char *>(&_perm),
+               sizeof(_perm));
+}
 
 
 int Permission::readFields(tcp::socket * sock) {

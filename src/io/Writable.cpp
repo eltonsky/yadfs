@@ -10,6 +10,12 @@ Writable::~Writable()
     //dtor
 }
 
+void Writable::write(ostream* os) {
+}
+
+void Writable::readFields(istream* is) {
+}
+
 int Writable::readFields(tcp::socket * sock) {return 0;}
 
 int Writable::write(tcp::socket * sock, int start) {return 0;}
@@ -19,6 +25,32 @@ string Writable::toString() {return NULL;}
 string Writable::printToString() {return NULL;}
 
 int Writable::length() {return -1;}
+
+
+void Writable::writeString(ostream* ofs, string str){
+    int length = str.size()+1;
+
+    ofs->write((char*)&length, sizeof(length));
+
+    if (length > 1)
+        ofs->write(str.c_str(), length);
+
+}
+
+string Writable::readString(istream* ifs) {
+    int length = 0;
+
+    ifs->read((char*)&length, sizeof(length));
+
+    if(length > 1) {
+        char buf[length];
+        ifs->read(buf, length);
+
+        return string(buf);
+    }
+
+    return string("");
+}
 
 
 int Writable::writeString(tcp::socket*sock, string str) {

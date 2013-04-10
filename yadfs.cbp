@@ -16,6 +16,15 @@
 					<Add option="-std=c++11" />
 					<Add option="-Iinclude" />
 					<Add option="-Iinclude/ipc" />
+					<Add option="-Iinclude/core" />
+					<Add option="-Iinclude/fs" />
+					<Add option="-Iinclude/io" />
+					<Add option="-Iinclude/lib" />
+					<Add option="-Iinclude/namenode" />
+					<Add option="-Iinclude/protocol" />
+					<Add option="-Iinclude/test" />
+					<Add option="-Iinclude/utils" />
+					<Add option="-Iinclude/datanode" />
 				</Compiler>
 				<Linker>
 					<Add option="-lpthread" />
@@ -41,21 +50,13 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="include/BlockQueue.h" />
-		<Unit filename="include/ClientProtocol.h" />
-		<Unit filename="include/Config.h" />
-		<Unit filename="include/DFSClient.h" />
-		<Unit filename="include/DataNodeProtocol.h" />
-		<Unit filename="include/IntWritable.h" />
-		<Unit filename="include/Log.h" />
-		<Unit filename="include/MethodWritable.h" />
-		<Unit filename="include/NameNode.h" />
-		<Unit filename="include/Permission.h" />
-		<Unit filename="include/StringWritable.h" />
-		<Unit filename="include/Test1.h" />
-		<Unit filename="include/Test2.h" />
-		<Unit filename="include/Utils.h" />
-		<Unit filename="include/Writable.h" />
+		<Unit filename="include/core/Permission.h" />
+		<Unit filename="include/datanode/DataNode.h" />
+		<Unit filename="include/fs/DFSClient.h" />
+		<Unit filename="include/io/IntWritable.h" />
+		<Unit filename="include/io/MethodWritable.h" />
+		<Unit filename="include/io/StringWritable.h" />
+		<Unit filename="include/io/Writable.h" />
 		<Unit filename="include/ipc/Call.h" />
 		<Unit filename="include/ipc/Client.h" />
 		<Unit filename="include/ipc/Connection.h" />
@@ -66,22 +67,30 @@
 		<Unit filename="include/ipc/RPC.h" />
 		<Unit filename="include/ipc/Responder.h" />
 		<Unit filename="include/ipc/Server.h" />
+		<Unit filename="include/lib/tinyxml2.h" />
+		<Unit filename="include/namenode/Block.h" />
+		<Unit filename="include/namenode/FSImage.h" />
+		<Unit filename="include/namenode/INode.h" />
+		<Unit filename="include/namenode/INodeDirectory.h" />
+		<Unit filename="include/namenode/INodeFile.h" />
+		<Unit filename="include/namenode/INodeFileUnderConstruction.h" />
+		<Unit filename="include/namenode/NameNode.h" />
+		<Unit filename="include/protocol/ClientProtocol.h" />
+		<Unit filename="include/protocol/DataNodeProtocol.h" />
+		<Unit filename="include/test/Test1.h" />
+		<Unit filename="include/test/Test2.h" />
+		<Unit filename="include/utils/BlockQueue.h" />
+		<Unit filename="include/utils/Config.h" />
+		<Unit filename="include/utils/Log.h" />
+		<Unit filename="include/utils/Utils.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="src/BlockQueue.cpp" />
-		<Unit filename="src/ClientProtocol.cpp" />
-		<Unit filename="src/Config.cpp" />
-		<Unit filename="src/DFSClient.cpp" />
-		<Unit filename="src/DataNodeProtocol.cpp" />
-		<Unit filename="src/IntWritable.cpp" />
-		<Unit filename="src/Log.cpp" />
-		<Unit filename="src/MethodWritable.cpp" />
-		<Unit filename="src/NameNode.cpp" />
-		<Unit filename="src/Permission.cpp" />
-		<Unit filename="src/StringWritable.cpp" />
-		<Unit filename="src/Test1.cpp" />
-		<Unit filename="src/Test2.cpp" />
-		<Unit filename="src/Utils.cpp" />
-		<Unit filename="src/Writable.cpp" />
+		<Unit filename="src/core/Permission.cpp" />
+		<Unit filename="src/datanode/DataNode.cpp" />
+		<Unit filename="src/fs/DFSClient.cpp" />
+		<Unit filename="src/io/IntWritable.cpp" />
+		<Unit filename="src/io/MethodWritable.cpp" />
+		<Unit filename="src/io/StringWritable.cpp" />
+		<Unit filename="src/io/Writable.cpp" />
 		<Unit filename="src/ipc/Call.cpp" />
 		<Unit filename="src/ipc/Client.cpp" />
 		<Unit filename="src/ipc/Connection.cpp" />
@@ -92,7 +101,22 @@
 		<Unit filename="src/ipc/RPC.cpp" />
 		<Unit filename="src/ipc/Responder.cpp" />
 		<Unit filename="src/ipc/Server.cpp" />
-		<Unit filename="src/tinyxml2.cpp" />
+		<Unit filename="src/lib/tinyxml2.cpp" />
+		<Unit filename="src/namenode/Block.cpp" />
+		<Unit filename="src/namenode/FSImage.cpp" />
+		<Unit filename="src/namenode/INode.cpp" />
+		<Unit filename="src/namenode/INodeDirectory.cpp" />
+		<Unit filename="src/namenode/INodeFile.cpp" />
+		<Unit filename="src/namenode/INodeFileUnderConstruction.cpp" />
+		<Unit filename="src/namenode/NameNode.cpp" />
+		<Unit filename="src/protocol/ClientProtocol.cpp" />
+		<Unit filename="src/protocol/DataNodeProtocol.cpp" />
+		<Unit filename="src/test/Test1.cpp" />
+		<Unit filename="src/test/Test2.cpp" />
+		<Unit filename="src/utils/BlockQueue.cpp" />
+		<Unit filename="src/utils/Config.cpp" />
+		<Unit filename="src/utils/Log.cpp" />
+		<Unit filename="src/utils/Utils.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

@@ -15,25 +15,20 @@ class Permission : public Writable
         Permission(Permission&);
         virtual ~Permission();
 
-        void readFields(istream*);
-        void write(ostream*);
-
+        virtual void readFields(istream*);
+        virtual void write(ostream*);
         virtual int readFields(tcp::socket * sock);
         virtual int write(tcp::socket * sock, int start=0);
+        virtual string toString();
+        virtual string printToString();
+        virtual string getClass();
+        virtual int length();
 
-        string getUserName() {return _userName;}
-        string getGroupName() {return _groupName;}
-        short getPerm() {return _perm;}
+        inline string getUserName() {return _userName;}
+        inline string getGroupName() {return _groupName;}
+        inline short getPerm() {return _perm;}
 
         friend std::ostream& operator<<(std::ostream&, const Permission&);
-
-        virtual string toString();
-
-        virtual string printToString();
-
-        virtual string getClass();
-
-        virtual int length();
 
     protected:
         string _userName;
