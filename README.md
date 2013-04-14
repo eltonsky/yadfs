@@ -3,7 +3,7 @@ yadfs
 
 yet another distributed file system (YADFS) is designed after hadoop distributed file system (HFDS) but implemented in c++.
 
-I was looking for a good project idea for learning modern c++, and also gain experience in threading and networking. 
+I was looking for a good project idea for learning and practicing c++, and also gain experience in threading and networking. 
 As I am familiar with implementation of HDFS, I figure this project is a perfect fit. 
 
 YADFS is using boost.asio for async network communication, log4cpp for logging and tinyxml for parsing configuration. It
