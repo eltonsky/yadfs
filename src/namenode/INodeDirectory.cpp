@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "INodeDirectory.h"
 using namespace std;
 
@@ -64,7 +65,7 @@ INodeDirectory* INodeDirectory::getParent(string path,
             if(i != -1){
                 // parent of the dest node
                 partialPath = path.substr(0,i);
-                currParent = dynamic_cast<INodeDirectory*>(currParent->findChildByPath(partialPath));
+                currParent = dynamic_cast<INodeDirectory*>(currParent->findChild(partialPath));
 
                 if(currParent == NULL) {
                     Log::write(ERROR, "partial path "+partialPath+" for file "+ path +" can not be located!");
@@ -155,7 +156,7 @@ shared_ptr<INode> INodeDirectory::addChild(shared_ptr<INode> sChild, bool inheri
 
     sChild->setModTime(time(NULL));
 
-    INode* exist = findChildByPath(sChild->getPath());
+    INode* exist = findChild(sChild->getPath());
 
     if(exist == NULL){
         _children.push_back(sChild);
@@ -167,7 +168,7 @@ shared_ptr<INode> INodeDirectory::addChild(shared_ptr<INode> sChild, bool inheri
 }
 
 
-INode* INodeDirectory::findChildByPath(string path) {
+INode* INodeDirectory::findChild(string path) {
     vector<std::shared_ptr<INode>>::iterator iter;
 
     for(iter=_children.begin();iter!= _children.end();iter++){

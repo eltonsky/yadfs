@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "INodeFileUnderConstruction.h"
 
 INodeFileUnderConstruction::INodeFileUnderConstruction()
@@ -62,3 +63,7 @@ INodeFileUnderConstruction::~INodeFileUnderConstruction()
 {
     //dtor
 }
+
+
+
+

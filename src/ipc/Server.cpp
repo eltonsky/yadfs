@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "Server.h"
 
 namespace IPC {

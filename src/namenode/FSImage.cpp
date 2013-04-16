@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "FSImage.h"
 
 using namespace std;
@@ -5,41 +6,22 @@ using namespace std;
 
 FSImage::FSImage()
 {
-    _imgVersion = atof(Config::get("pfs,imgFile,version"));
+    _imgVersion = Config::getInt("pfs.imgFile.version");
     _namespaceId = -1;
     _numFiles = 1; // _root always exists
     _genStamp = -1;
+}
 
-    // init lock
-    m_lock1 = boost::mutex::scoped_lock(m_log1);
 
-    //init sem
-    sem_init(&_sem_image, 0, 1);
 
-    //init root
-    _root = new INodeDirectory("/");
+FSImage::FSImage(string imgFile) : FSImage()
+{
+    _imageFile = imgFile;
 }
 
 
 FSImage::~FSImage()
 {
-    sem_destroy(&_sem_image);
-
-    if(_root != NULL)
-        delete _root;
-}
-
-
-FSImage::FSImage(string imgFile) : FSImage() {
-
-    _imageFile = imgFile;
-}
-
-
-void FSImage::replaceRoot(INode* newRoot) {
-    delete _root;
-
-    _root = new INodeDirectory(newRoot);
 }
 
 
@@ -51,73 +33,85 @@ void FSImage::loadImage() {
     INode* child;
 
     try{
-        imgStream.open(_imageFile.c_str(),ios::in | ios::binary);
+        imgStream.open(_imageFile.c_str(), ios::binary | ios::ate);
+        long fileSize = imgStream.tellg();
 
-        if(imgStream.is_open()){
+        if(fileSize > 0){
+            imgStream.seekg(0, ios::beg);
 
             // global param
-            imgStream.read((char*)&_imgVersion, sizeof(_imgVersion));
+            imgStream.read(reinterpret_cast<char*>(&_imgVersion),
+                            sizeof(_imgVersion));
 
-            imgStream.read((char*)&_namespaceId, sizeof(_namespaceId));
+            imgStream.read(reinterpret_cast<char*>(&_namespaceId),
+                            sizeof(_namespaceId));
 
-            imgStream.read((char*)&_numFiles, sizeof(_numFiles));
+            imgStream.read(reinterpret_cast<char*>(&_numFiles),
+                            sizeof(_numFiles));
 
-            imgStream.read((char*)&_genStamp, sizeof(_genStamp));
+            imgStream.read(reinterpret_cast<char*>(&_genStamp),
+                            sizeof(_genStamp));
 
             if (imgStream.good()) {
 
+                INode* current;
+
                 // load INodes
                 for(int i=0; i < _numFiles; i++) {
-                    INode current;
-                    current.readFields(&imgStream);
-                    parent = INodeDirectory::getParent(current.getPath(), _root);
+                    current = new INode();
 
-                    // if dir
-                    if (current.getBlockNum() == 0){
+                    current->readFields(&imgStream);
+                    parent = INodeDirectory::getParent(current->getPath(), _root.get());
+
+                    // if dir; can not use is_directory() here,
+                    // that's not stored in image
+                    if (current->getBlockNum() == 0){
 
                         if (parent==NULL) {
-                            replaceRoot(&current);
-                            child = _root;
-                        }
-                        else {
-                            INodeDirectory* dir = new INodeDirectory(current.getPath());
+                            _root = make_shared<INodeDirectory>(current);
+                            child = _root.get();
+                        } else {
+                            shared_ptr<INode> pNode =
+                                make_shared<INodeDirectory>(current->getPath());
 
-                            shared_ptr<INode> pNode(dir);
-
-                            child = parent->addChild(pNode, 1);
+                            child = parent->addChild(pNode, true).get();
                         }
 
                     } else {
-                    // if file
-                        INodeFile* file = new INodeFile(current.getPath(),current.getReplication(),
-                                       current.getBlockSize(), current.getBlockNum());
+                        // if file
+                        shared_ptr<INode> pNode =
+                                make_shared<INodeFile>(current->getPath(),
+                                                       current->getReplication(),
+                                                       current->getBlockSize(),
+                                                       current->getBlockNum());
 
-                        shared_ptr<INode> pNode(file);
-
+                         shared_ptr<Block> blk;
                         // read blocks
-                        for(int fileIndex = 0; fileIndex < current.getBlockNum(); fileIndex++) {
-                            Block blk;
-                            blk.readFields(&imgStream);
-                            file->addBlock(blk);
+                        for(int fileIndex = 0; fileIndex < current->getBlockNum(); fileIndex++) {
+                            blk = make_shared<Block>();
+                            blk->readFields(&imgStream);
+                            (dynamic_cast<INodeFile*>(pNode.get()))->addBlock(blk);
                         }
 
-                        child = parent->addChild(pNode, 1);
-
+                        child = parent->addChild(pNode, true).get();
                     }
 
                     if (child == NULL) {
-                        throw("failed to insert INode " + current.getPath());
+                        Log::write(ERROR, "failed to inert INode %s\n",
+                                   current->getPath().c_str());
+                        return;
                     }
 
                     //get permission for this INode
-                    Permission perm;
-                    perm.readFields(&imgStream);
+                    shared_ptr<Permission> perm =
+                        make_shared<Permission>();
+
+                    perm->readFields(&imgStream);
 
                     if(parent==NULL)
                         _root->setPermission(perm);
                     else
                         child->setPermission(perm);
-
                 }
 
                 // load data nodes
@@ -126,11 +120,17 @@ void FSImage::loadImage() {
                 // load file under construct
 
             }
-            //Log::write(INFO, "imgVersion is : "  + boost::lexical_cast<string>(_imgVersion));
+        } else {
+            // load default namespace structure in mem
+
+            // root ('/') in namespace
+
 
         }
-    }catch(char* err){
-        Log::write(INFO, err);
+
+    }catch(exception& exp){
+        Log::write(ERROR, "FSImage::loadImage() : %s",
+                   exp.what());
 
         if(imgStream.is_open())
             imgStream.close();
@@ -142,15 +142,17 @@ void FSImage::loadImage() {
         imgStream.close();
 
     //mark image as ready
-    sem_wait(&_sem_image);
-    _ready = true;
-    sem_post(&_sem_image);
-    m_cond1.notify_all();
+    _m_ready.lock();
 
-    return;
+    _ready = true;
+
+    _m_ready.unlock();
+
+    _m_cond_ready.notify_all();
 }
 
 
+// save in memory namespace to disk.
 void FSImage::saveImage() {
     ofstream imgOStream;
 
@@ -158,22 +160,27 @@ void FSImage::saveImage() {
         imgOStream.open(_imageFile.c_str(),ios::out | ios::binary);
 
         if(imgOStream.is_open()){
-            imgOStream.write((char*)&_imgVersion, sizeof(_imgVersion));
+            imgOStream.write(reinterpret_cast<const char*>(&_imgVersion),
+                              sizeof(_imgVersion));
 
-            imgOStream.write((char*)&_namespaceId, sizeof(_namespaceId));
+            imgOStream.write(reinterpret_cast<const char*>(&_namespaceId),
+                              sizeof(_namespaceId));
 
-            imgOStream.write((char*)&_numFiles, sizeof(_numFiles));
+            imgOStream.write(reinterpret_cast<const char*>(&_numFiles),
+                              sizeof(_numFiles));
 
-            imgOStream.write((char*)&_genStamp, sizeof(_genStamp));
+            imgOStream.write(reinterpret_cast<const char*>(&_genStamp),
+                              sizeof(_genStamp));
 
             //recursively write each inode.
-            saveINode(_root, &imgOStream);
-            saveINodeWrap(_root, &imgOStream);
+            saveINode(_root.get(), &imgOStream);
+            saveINodeWrap(_root.get(), &imgOStream);
         }
 
 
-    }catch(char* err){
-        Log::write(INFO, err);
+    }catch(exception& exp){
+        Log::write(ERROR, "FSImage::saveImage : %s\n",
+                   exp.what());
 
         if(imgOStream.is_open())
             imgOStream.close();
@@ -182,9 +189,8 @@ void FSImage::saveImage() {
     }
 
     if(imgOStream.is_open())
-            imgOStream.close();
+        imgOStream.close();
 
-    return;
 }
 
 
@@ -194,36 +200,46 @@ void FSImage::saveINode(INode* currNode, ofstream* ofs) {
     Writable::writeString(ofs, path);
 
     short rep = currNode->getReplication();
-    ofs->write((char*)&rep, sizeof(rep));
+    ofs->write(reinterpret_cast<const char*>(&rep),
+               sizeof(rep));
 
     long modTime = currNode->getModTime();
-    ofs->write((char*)&modTime, sizeof(modTime));
+    ofs->write(reinterpret_cast<const char*>(&modTime),
+               sizeof(modTime));
 
     long accessTime = currNode->getAccessTime();
-    ofs->write((char*)&accessTime, sizeof(accessTime));
+    ofs->write(reinterpret_cast<const char*>(&accessTime),
+                sizeof(accessTime));
 
     long blkSize = currNode->getBlockSize();
-    ofs->write((char*)&blkSize, sizeof(blkSize));
+    ofs->write(reinterpret_cast<const char*>(&blkSize),
+                sizeof(blkSize));
 
     int blkNum = currNode->getBlockNum();
-    ofs->write((char*)&blkNum, sizeof(blkNum));
+    ofs->write(reinterpret_cast<const char*>(&blkNum),
+                sizeof(blkNum));
 
     if(currNode->isDirectory()) {
-        long nsQuota = currNode->nsQuota;
-        ofs->write((char*)&nsQuota, sizeof(nsQuota));
+        long nsQuota = currNode->getNSQuota();
 
-        long dsQuota = currNode->dsQuota;
-        ofs->write((char*)&dsQuota, sizeof(dsQuota));
+        ofs->write(reinterpret_cast<const char*>(&nsQuota),
+                    sizeof(nsQuota));
+
+        long dsQuota = currNode->getDSQuota();
+
+        ofs->write(reinterpret_cast<const char*>(&dsQuota),
+                    sizeof(dsQuota));
     } else {
         //write blocks
-        vector<Block> blocks = ((INodeFile*)currNode)->getBlocks();
+        vector<shared_ptr<Block>> blocks =
+            (dynamic_cast<INodeFile*>(currNode))->getBlocks();
 
         for(int i=0; i<currNode->getBlockNum();i++){
-            blocks[i].write(ofs);
+            blocks[i]->write(ofs);
         }
     }
 
-    currNode->getPermission().write(ofs);
+    currNode->getPermission()->write(ofs);
 }
 
 /*first loop store all children to image file;
@@ -250,17 +266,21 @@ void FSImage::saveINodeWrap(INode* currNode, ofstream* ofs){
 
 
 /*wait until fsimage finished loading.*/
-void FSImage::waitForReady() {
+void FSImage::_waitForReady() {
+    std::unique_lock<std::mutex> ulock(_m_ready);
 
     long start = time(NULL);
 
     while (!_ready) {
       try {
-        m_cond1.timed_wait(m_lock1,boost::posix_time::milliseconds(5000));
 
-        Log::write(INFO, "wait for " + boost::lexical_cast<string>(time(NULL)-start) +" for image ready...");
-      } catch (std::exception& e) {
-          Log::write(INFO,e.what());
+        _m_cond_ready.wait_for(ulock, chrono::milliseconds(100),
+                [this] { return _ready; });
+
+        Log::write(INFO, "wait for %d for image ready...\n",
+                   time(NULL)-start);
+      } catch (exception& e) {
+          Log::write(ERROR, "FSImage::_waitForReady() : %s\n",e.what());
       }
     }
 }
@@ -270,88 +290,24 @@ void FSImage::addFile(shared_ptr<INode> sNode, bool protect, bool inheritPerm) {
     INodeDirectory* parent = NULL;
 
     if(protect)
-        waitForReady();
+        _waitForReady();
 
     try{
-        parent = INodeDirectory::getParent(sNode.get()->getPath(), _root);
+        parent = INodeDirectory::getParent(sNode->getPath(), _root.get());
 
-        sNode.get()->setParent(parent);
+        sNode->setParent(parent);
 
         parent->addChild(sNode, inheritPerm);
 
         _numFiles++;
 
-        Log::write(INFO, "added node " + sNode.get()->getPath());
-    } catch(char* e) {
-        Log::write(ERROR, "fail to add node " + sNode.get()->getPath()+" : " +e);
+        Log::write(INFO, "added file " + sNode.get()->getPath());
+    } catch(exception& e) {
+        Log::write(ERROR, "fail to add file %s : %s\n",
+                   sNode->getPath().c_str(), e.what());
     }
 
 }
-
-
-/*
-Accessor & Mutator
-*/
-
-INodeDirectory* FSImage::getRoot() {
-    return _root;
-}
-
-void FSImage::setVersion(float v) {
-    _imgVersion = v;
-}
-
-
-float FSImage::getVersion(){
-    return _imgVersion;
-}
-
-void FSImage::setFile(string file){
-    _imageFile = file;
-}
-
-
-string FSImage::getFile(){
-    return _imageFile;
-}
-
-void FSImage::setNamespaceID(int namespaceID){
-    _namespaceId = namespaceID;
-}
-
-
-int FSImage::getNamespaceID(){
-    return _namespaceId;
-}
-
-void FSImage::setNumFiles(int num){
-    _numFiles = num;
-}
-
-int FSImage::getNumFiles(){
-    return _numFiles;
-}
-
-
-void FSImage::setGenStamp(long gs) {
-    _genStamp = gs;
-}
-
-long FSImage::getGenStamp(){
-    return _genStamp;
-}
-
-
-//print to stdout
-void FSImage::print(INode* node) {
-    node->print(true);
-}
-
-
-
-
-
-
 
 
 

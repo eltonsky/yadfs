@@ -1,30 +1,20 @@
+#include "Precompile.h"
 #include "FSEditLog.h"
 
 using namespace std;
 
 
-FSEditLog::FSEditLog(FSImage* fsimage)
-{
-    sem_init(&_sem_log, 0, 1);
+FSEditLog::FSEditLog(FSImage* fsimage){
+
     _isSyncRunning = false;
     _fsImage = fsimage;
     _version = _fsImage->getVersion();
-
-    m_lock1 = boost::mutex::scoped_lock(m_log1);
 
     open(OUT);
 }
 
 
-FSEditLog::~FSEditLog()
-{
-    sem_destroy(&_sem_log);
-
-    if(_editIStream != NULL)
-        delete _editIStream;
-
-    if(_editOStream != NULL)
-        delete _editOStream;
+FSEditLog::~FSEditLog(){
 }
 
 
@@ -34,10 +24,11 @@ void FSEditLog::open(OpenMode mode) {
     try{
 
         if(mode == IN) {
-            _editIStream = new ifstream(file);
+            _editIStream = make_shared<ifstream>(file);
         } else {
-            _editOStream = new ofstream(file);
-            _editOStream->write((char*)&_version, sizeof(_version));
+            _editOStream = make_shared<ofstream>(file);
+            _editOStream->write(reinterpret_cast<const char*>(&_version),
+                                 sizeof(_version));
         }
     } catch (exception& e){
         Log::write(ERROR, e.what());
@@ -53,11 +44,7 @@ void FSEditLog::open(OpenMode mode) {
 flush.
 */
 void FSEditLog::logSync() {
-    sem_wait(&_sem_log);
-
-    while(_isSyncRunning) {
-        m_cond1.timed_wait(m_lock1,boost::posix_time::milliseconds(1000));
-    }
+    std::unique_lock<std::mutex> ulock(_m_log);
 
     _isSyncRunning = true;
 
@@ -65,21 +52,15 @@ void FSEditLog::logSync() {
 
     _isSyncRunning = false;
 
-    sem_post(&_sem_log);
-
-    m_cond1.notify_all();
-
 }
 
 
 void FSEditLog::logEdit(stringstream* ss) {
-    sem_wait(&_sem_log);
+    std::unique_lock<std::mutex> ulock(_m_log);
 
     if(_editOStream->good()) {
         _editOStream->write(ss->str().c_str(), ss->str().size());
     }
-
-    sem_post(&_sem_log);
 }
 
 
@@ -132,7 +113,8 @@ void FSEditLog::loadEdits() {
         short opcode = -1;
 
         try{
-            _editIStream->read((char*)&opcode, sizeof(opcode));
+            _editIStream->read(reinterpret_cast<char*>(&opcode),
+                                sizeof(opcode));
 
             if(opcode==OP_INVALID) {
                 Log::write(ERROR,"get OP_INVALID from editLog. break ...");
@@ -161,21 +143,22 @@ void FSEditLog::loadEdits() {
                     numOpClose++;
                 }
 
-                newNode->readFields(_editIStream);
+                newNode->readFields(_editIStream.get());
 
+                shared_ptr<Block> blk;
                 for(int i =0; i< newNode->getBlockNum(); i++){
-                    Block blk;
-                    blk.readFields(_editIStream);
+                    blk = make_shared<Block>();
+                    blk->readFields(_editIStream.get());
                     newNode->addBlock(blk);
                 }
 
-                Permission perm;
-                perm.readFields(_editIStream);
+                shared_ptr<Permission> perm;
+                perm->readFields(_editIStream.get());
                 newNode->setPermission(perm);
 
                 if(opcode==OP_ADD){
-                    clientName = Writable::readString(_editIStream);
-                    clientMachine = Writable::readString(_editIStream);
+                    clientName = Writable::readString(_editIStream.get());
+                    clientMachine = Writable::readString(_editIStream.get());
 
                     ((INodeFileUnderConstruction*)newNode)->setClientName(clientName);
                     ((INodeFileUnderConstruction*)newNode)->setClientMachine(clientMachine);
@@ -199,11 +182,6 @@ void FSEditLog::loadEdits() {
                 _editIStream->close();
 
             Log::write(ERROR, e.what());
-        }catch(char* e){
-            if(_editIStream->is_open())
-                _editIStream->close();
-
-            Log::write(ERROR, e);
         }
 
     }
@@ -212,95 +190,89 @@ void FSEditLog::loadEdits() {
         _editIStream->close();
 
     long elapse = time(NULL) - startTime;
-    Log::write(INFO, "FSEditLog::loadEdits takes " + boost::lexical_cast<string>(elapse)+" secs");
+    Log::write(INFO, "FSEditLog::loadEdits takes %d secs\n", elapse);
 }
 
 
 /*log OPs*/
 
 void FSEditLog::logOpenFile(string path, INodeFileUnderConstruction& newNode) {
-    stringstream* ss = new stringstream();
+    stringstream ss;
 
     //op code
     short op_add = OP_ADD;
-    ss->write((char*)&op_add, sizeof(op_add));
+    ss.write(reinterpret_cast<const char*>(&op_add),
+              sizeof(op_add));
 
     // INode
-    newNode.write(ss);
+    newNode.write(&ss);
 
     //blks
-    vector<Block> blks = newNode.getBlocks();
-    for(vector<Block>::iterator iter = blks.begin(); iter != blks.end(); iter++){
-        iter->write(ss);
+    vector<shared_ptr<Block>> blks = newNode.getBlocks();
+    for(vector<shared_ptr<Block>>::iterator iter = blks.begin(); iter != blks.end(); iter++){
+        (*iter)->write(&ss);
     }
 
     //write perm
-    newNode.getPermission().write(ss);
+    newNode.getPermission()->write(&ss);
 
     //write client name /machine
-    Writable::writeString(ss,newNode.getClientName());
-    Writable::writeString(ss,newNode.getClientMachine());
+    Writable::writeString(&ss,newNode.getClientName());
+    Writable::writeString(&ss,newNode.getClientMachine());
 
     //locs
     //version 1.0.4 doesn't write locs to edit log.
 
-    logEdit(ss);
-
-    delete ss;
+    logEdit(&ss);
 }
 
 
 void FSEditLog::logCloseFile(string path, INodeFile& newNode) {
-    stringstream* ss = new stringstream();
+    stringstream ss;
 
     //op code
     short op_close = OP_CLOSE;
-    ss->write((char*)&op_close, sizeof(op_close));
+    ss.write((char*)&op_close, sizeof(op_close));
 
     // INode
-    newNode.write(ss);
+    newNode.write(&ss);
 
     //blks
-    vector<Block> blks = newNode.getBlocks();
-    for(vector<Block>::iterator iter = blks.begin(); iter != blks.end(); iter++){
-        iter->write(ss);
+    vector<shared_ptr<Block>> blks = newNode.getBlocks();
+    for(vector<shared_ptr<Block>>::iterator iter = blks.begin(); iter != blks.end(); iter++){
+        (*iter)->write(&ss);
     }
 
     //write perm
-    newNode.getPermission().write(ss);
+    newNode.getPermission()->write(&ss);
 
     //locs
     //version 1.0.4 doesn't write locs to edit log.
 
-    logEdit(ss);
-
-    delete ss;
+    logEdit(&ss);
 }
 
 
 void FSEditLog::logMkDir(string path, INode& newNode) {
-    stringstream* ss = new stringstream();
+    stringstream ss;
 
     //op code
     short op_close = OP_MKDIR;
-    ss->write((char*)&op_close, sizeof(op_close));
+    ss.write((char*)&op_close, sizeof(op_close));
 
     //path, modify time, access time
-    Writable::writeString(ss,newNode.getPath());
+    Writable::writeString(&ss, newNode.getPath());
 
     long modTime= newNode.getModTime();
-    ss->write((char*)&modTime,sizeof(modTime));
+    ss.write((char*)&modTime,sizeof(modTime));
 
     long accessTime = newNode.getAccessTime();
-    ss->write((char*)&accessTime,sizeof(accessTime));
+    ss.write((char*)&accessTime,sizeof(accessTime));
 
     //write perm
-    newNode.getPermission().write(ss);
+    newNode.getPermission()->write(&ss);
 
-
-    logEdit(ss);
-
-    delete ss;
+    logEdit(&ss);
 }
 
 

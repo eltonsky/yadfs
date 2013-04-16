@@ -25,12 +25,12 @@ class INode : public Writable
         inline const long getModTime() {return _modTime;}
         inline const long getAccessTime() {return _accessTime;};
         inline const shared_ptr<Permission> getPermission() {return _perm;}
-        inline const shared_ptr<INode> getParent() {return _parent;}
+        inline const INode* getParent() {return _parent;}
         inline const long getNSQuota() {return _nsQuota;}
         inline const long getDSQuota() {return _dsQuota;}
         inline void setPermission(shared_ptr<Permission> p) {_perm = p;}
         inline void setModTime(long modTime) {_modTime = modTime;}
-        inline void setParent(shared_ptr<INode> parent) {_parent = parent;}
+        inline void setParent(INode* parent) {_parent = parent;}
         inline bool isDirectory() {return false;}
 
         virtual void readFields(istream*);
@@ -49,7 +49,7 @@ class INode : public Writable
         long _dsQuota = 0; //max diskspace allowed
 
         shared_ptr<Permission> _perm;
-        shared_ptr<INode> _parent = NULL; // must be a INodeDirectory
+        INode* _parent = NULL; // must be a INodeDirectory
 
     private:
 

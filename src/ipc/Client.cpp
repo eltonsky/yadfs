@@ -1,6 +1,8 @@
 //TODO: when exception, stop a call or a connection, instead of std::abort. it's a bit hash.
 
+#include "Precompile.h"
 #include "Client.h"
+
 
 const long Client::_call_wait_time = 100;
 bool Client::_should_stop = false;

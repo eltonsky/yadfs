@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "DFSClient.h"
 
 DFSClient::DFSClient()

@@ -1,6 +1,7 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include "Precompile.h"
 #include "Writable.h"
 #include <cstdlib>
 #include <stdio.h>

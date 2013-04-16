@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "IntWritable.h"
 
 IntWritable::IntWritable(){}

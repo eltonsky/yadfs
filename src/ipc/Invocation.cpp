@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "Invocation.h"
 
 Invocation::Invocation()

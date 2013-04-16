@@ -34,10 +34,7 @@ class INodeDirectory : public INode
 
         static INodeDirectory* getParent(string path,
                                             INodeDirectory* root);
-//        static INodeDirectory* findByPath(string path,
-//                                            vector<short>pos,
-//                                            INodeDirectory* parent);
-        INode* findChildByPath(string path);
+        INode* findChild(string path);
 
         void print(bool);
 

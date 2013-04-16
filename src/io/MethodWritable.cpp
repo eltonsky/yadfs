@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "MethodWritable.h"
 
 MethodWritable::MethodWritable()

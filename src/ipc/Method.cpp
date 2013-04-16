@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "Method.h"
 #include "NameNode.h"
 

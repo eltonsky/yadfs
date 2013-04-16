@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "DataNodeProtocol.h"
 
 DataNodeProtocol::DataNodeProtocol()

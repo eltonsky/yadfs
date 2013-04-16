@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "DataNode.h"
 
 DataNode::DataNode()

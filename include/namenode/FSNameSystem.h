@@ -9,29 +9,28 @@
 class FSNameSystem
 {
     public:
-        virtual ~FSNameSystem();
 
-        void saveNameSpace();
-        void loadNameSpace();
-
-        void initialize();
         static FSNameSystem& getFSNamesystem() {
             static FSNameSystem fssys;
 
             return fssys;
         }
+        virtual ~FSNameSystem();
 
-        FSImage* getFSImage() {return _fsImage;}
-        FSEditLog* getEditLog() {return _fsEditLog;}
+        void saveNameSpace();
+        void loadNameSpace();
+        void initialize();
 
-    protected:
-        FSImage* _fsImage;
-        FSEditLog* _fsEditLog;
+        inline shared_ptr<FSImage> getFSImage() {return _fsImage;}
+        inline shared_ptr<FSEditLog> getEditLog() {return _fsEditLog;}
+        inline INodeDirectory* getRoot() {return _fsImage->getRoot().get();}
 
     private:
-        FSNameSystem();
 
-         // Stop the compiler generating methods of copy the object
+        shared_ptr<FSImage> _fsImage;
+        shared_ptr<FSEditLog> _fsEditLog;
+
+        FSNameSystem();
         FSNameSystem(FSNameSystem const&);
         void operator=(FSNameSystem const&);
 };

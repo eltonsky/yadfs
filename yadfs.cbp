@@ -51,6 +51,7 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="include/core/Permission.h" />
+		<Unit filename="include/core/Precompile.h" />
 		<Unit filename="include/datanode/DataNode.h" />
 		<Unit filename="include/fs/DFSClient.h" />
 		<Unit filename="include/io/IntWritable.h" />
@@ -69,7 +70,9 @@
 		<Unit filename="include/ipc/Server.h" />
 		<Unit filename="include/lib/tinyxml2.h" />
 		<Unit filename="include/namenode/Block.h" />
+		<Unit filename="include/namenode/FSEditLog.h" />
 		<Unit filename="include/namenode/FSImage.h" />
+		<Unit filename="include/namenode/FSNameSystem.h" />
 		<Unit filename="include/namenode/INode.h" />
 		<Unit filename="include/namenode/INodeDirectory.h" />
 		<Unit filename="include/namenode/INodeFile.h" />
@@ -85,6 +88,7 @@
 		<Unit filename="include/utils/Utils.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/core/Permission.cpp" />
+		<Unit filename="src/core/Precompile.cpp" />
 		<Unit filename="src/datanode/DataNode.cpp" />
 		<Unit filename="src/fs/DFSClient.cpp" />
 		<Unit filename="src/io/IntWritable.cpp" />
@@ -103,7 +107,9 @@
 		<Unit filename="src/ipc/Server.cpp" />
 		<Unit filename="src/lib/tinyxml2.cpp" />
 		<Unit filename="src/namenode/Block.cpp" />
+		<Unit filename="src/namenode/FSEditLog.cpp" />
 		<Unit filename="src/namenode/FSImage.cpp" />
+		<Unit filename="src/namenode/FSNameSystem.cpp" />
 		<Unit filename="src/namenode/INode.cpp" />
 		<Unit filename="src/namenode/INodeDirectory.cpp" />
 		<Unit filename="src/namenode/INodeFile.cpp" />

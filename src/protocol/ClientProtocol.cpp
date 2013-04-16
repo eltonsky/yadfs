@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "ClientProtocol.h"
 
 ClientProtocol::ClientProtocol()

@@ -1,3 +1,4 @@
+#include "Precompile.h"
 #include "Permission.h"
 
 Permission::Permission()

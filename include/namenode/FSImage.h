@@ -14,6 +14,8 @@
 #include <exception>
 #include <semaphore.h>
 #include <time.h>
+#include <mutex>
+#include <condition_variable>
 #include "DataNode.h"
 #include "INodeFileUnderConstruction.h"
 #include "INodeDirectory.h"
@@ -23,58 +25,57 @@ class FSImage
 {
     public:
         FSImage();
-        virtual ~FSImage();
-
         FSImage(string imgFile);
+        ~FSImage();
 
         void loadImage();
         void saveImage();
         void saveINode(INode*, ofstream*);
         void saveINodeWrap(INode*, ofstream*);
-
-        INodeDirectory* getParent(string path, INodeDirectory* root);
-
-        INodeDirectory* findByPath(vector<string>*, INodeDirectory*);
-
         void addFile(shared_ptr<INode>, bool protect, bool inheritPerm);
+        void replaceRoot(shared_ptr<INode>);
 
-        void setVersion(float);
-        float getVersion();
-        void setFile(string);
-        string getFile();
-        void setNamespaceID(int);
-        int getNamespaceID();
-        void setNumFiles(int);
-        int getNumFiles();
-        void setGenStamp(long);
-        long getGenStamp();
-        INodeDirectory* getRoot();
 
-        void replaceRoot(INode*);
+        inline shared_ptr<INodeDirectory> getRoot() { return _root; }
 
-        // test
-        static void print(INode*);
-    protected:
+        inline void setVersion(float v) {_imgVersion = v;}
+
+        inline float getVersion(){return _imgVersion;}
+
+        inline void setFile(string file){_imageFile = file;}
+
+        inline string getFile(){return _imageFile;}
+
+        inline void setNamespaceID(int namespaceID){_namespaceId = namespaceID;}
+
+        inline int getNamespaceID(){return _namespaceId;}
+
+        inline void setNumFiles(int num){_numFiles = num;}
+
+        inline int getNumFiles(){return _numFiles;}
+
+        inline void setGenStamp(long gs) {_genStamp = gs;}
+
+        inline long getGenStamp(){return _genStamp;}
+
+        inline void print(INode* node) {node->print(true);}
+
+    private:
 
         float _imgVersion;
         string _imageFile;
         int _namespaceId;
         int _numFiles;
         long _genStamp;
-        INodeDirectory* _root;
-
-        vector<DataNode*> dataNodes;
-
-        vector<INodeFileUnderConstruction*> fileUnderConst;
-
-    private:
+        shared_ptr<INodeDirectory> _root;
+        vector<shared_ptr<DataNode>> dataNodes;
+        vector<shared_ptr<INodeFileUnderConstruction>> fileUnderConst;
         bool _ready = false;
-        boost::mutex m_log1;
-        boost::condition_variable m_cond1;
-        boost::mutex::scoped_lock m_lock1;
-        sem_t _sem_image;
 
-        void waitForReady();
+        std::mutex _m_ready;
+        std::condition_variable _m_cond_ready;
+
+        void _waitForReady();
 };
 
 #endif // FSIMAGE_H
