@@ -3,8 +3,10 @@
 
 FSNameSystem::FSNameSystem()
 {
-    _fsImage = make_shared<FSImage>(Config::get("pfs,imgFile,path"));
-    _fsEditLog = make_shared<FSEditLog>(_fsImage.get());
+    _fsImage =
+        make_shared<FSImage>(Config::get("dfs.imgFile.path"));
+    _fsEditLog =
+        shared_ptr<FSEditLog>(new FSEditLog(_fsImage.get()));
 }
 
 FSNameSystem::~FSNameSystem()

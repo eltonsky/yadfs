@@ -31,8 +31,8 @@ class INode : public Writable
         inline void setPermission(shared_ptr<Permission> p) {_perm = p;}
         inline void setModTime(long modTime) {_modTime = modTime;}
         inline void setParent(INode* parent) {_parent = parent;}
-        inline bool isDirectory() {return false;}
 
+        virtual bool isDirectory() { return false; };
         virtual void readFields(istream*);
         virtual void write(ostream*);
         virtual void print(bool recursive);

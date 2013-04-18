@@ -6,7 +6,7 @@ using namespace std;
 
 FSImage::FSImage()
 {
-    _imgVersion = Config::getInt("pfs.imgFile.version");
+    _imgVersion = Config::getInt("dfs.imgFile.version");
     _namespaceId = -1;
     _numFiles = 1; // _root always exists
     _genStamp = -1;
@@ -54,11 +54,11 @@ void FSImage::loadImage() {
 
             if (imgStream.good()) {
 
-                INode* current;
+                shared_ptr<INode> current;
 
                 // load INodes
                 for(int i=0; i < _numFiles; i++) {
-                    current = new INode();
+                    current = make_shared<INode>();
 
                     current->readFields(&imgStream);
                     parent = INodeDirectory::getParent(current->getPath(), _root.get());
@@ -68,7 +68,7 @@ void FSImage::loadImage() {
                     if (current->getBlockNum() == 0){
 
                         if (parent==NULL) {
-                            _root = make_shared<INodeDirectory>(current);
+                            _root = make_shared<INodeDirectory>(current.get());
                             child = _root.get();
                         } else {
                             shared_ptr<INode> pNode =
@@ -108,10 +108,7 @@ void FSImage::loadImage() {
 
                     perm->readFields(&imgStream);
 
-                    if(parent==NULL)
-                        _root->setPermission(perm);
-                    else
-                        child->setPermission(perm);
+                    child->setPermission(perm);
                 }
 
                 // load data nodes
@@ -122,9 +119,9 @@ void FSImage::loadImage() {
             }
         } else {
             // load default namespace structure in mem
-
             // root ('/') in namespace
-
+            _root = make_shared<INodeDirectory>("/");
+            _root->setPermission(make_shared<Permission>());
 
         }
 
@@ -173,12 +170,13 @@ void FSImage::saveImage() {
                               sizeof(_genStamp));
 
             //recursively write each inode.
-            saveINode(_root.get(), &imgOStream);
+            saveINode(static_cast<INode*>(_root.get()), &imgOStream);
+            cout<<"_root count " << _root.use_count()<<endl;
             saveINodeWrap(_root.get(), &imgOStream);
         }
 
 
-    }catch(exception& exp){
+    } catch(exception& exp) {
         Log::write(ERROR, "FSImage::saveImage : %s\n",
                    exp.what());
 
@@ -195,6 +193,9 @@ void FSImage::saveImage() {
 
 
 void FSImage::saveINode(INode* currNode, ofstream* ofs) {
+
+///
+cout<<currNode->getPath()<<" : "<<currNode->isDirectory() << endl;
 
     string path = currNode->getPath();
     Writable::writeString(ofs, path);
@@ -246,9 +247,9 @@ void FSImage::saveINode(INode* currNode, ofstream* ofs) {
 * 2nd loop store children recursively. This way keeps the order of
 * INode data in image file.
 */
-void FSImage::saveINodeWrap(INode* currNode, ofstream* ofs){
+void FSImage::saveINodeWrap(INodeDirectory* currNode, ofstream* ofs){
 
-    vector<shared_ptr<INode>> children = ((INodeDirectory*)currNode)->getChildren();
+    vector<shared_ptr<INode>> children = currNode->getChildren();
 
     vector<shared_ptr<INode>>::iterator iter;
 
@@ -259,7 +260,8 @@ void FSImage::saveINodeWrap(INode* currNode, ofstream* ofs){
     iter= children.begin();
     for(; iter != children.end(); iter++) {
         if(iter->get()->isDirectory()) {
-            saveINodeWrap(iter->get(), ofs);
+            saveINodeWrap(dynamic_cast<INodeDirectory*>(iter->get()),
+                           ofs);
         }
     }
 }

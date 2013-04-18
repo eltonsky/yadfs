@@ -31,7 +31,7 @@ class FSImage
         void loadImage();
         void saveImage();
         void saveINode(INode*, ofstream*);
-        void saveINodeWrap(INode*, ofstream*);
+        void saveINodeWrap(INodeDirectory*, ofstream*);
         void addFile(shared_ptr<INode>, bool protect, bool inheritPerm);
         void replaceRoot(shared_ptr<INode>);
 

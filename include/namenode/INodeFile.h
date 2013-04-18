@@ -16,7 +16,7 @@ class INodeFile : public INode
 
         virtual void readFields(istream* is);
         virtual void write(ostream* os) {INode::write(os);}
-        virtual bool isDirectory() {return false;}
+        bool isDirectory() {return false;}
 
         inline vector<shared_ptr<Block>>& getBlocks() {return std::ref(_blocks);}
 

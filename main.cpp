@@ -56,7 +56,7 @@ int main(int argc, char** argv)
 
     if (argc < 2)
     {
-        cout<<"Is this client or server? <type> required."<<endl;
+        cout<<"What mode is running on? <type> required."<<endl;
         return -1;
 
     } else if(strcmp(argv[1],"-c") == 0) {
@@ -64,6 +64,14 @@ int main(int argc, char** argv)
         ifServer = false;
 
     } else if (strcmp(argv[1], "-s") ==0) {
+
+    } else if (strcmp(argv[1], "-fs") ==0) {
+
+        NameNode::getInstance().loadNameSpace();
+
+        NameNode::getInstance().saveNameSpace();
+
+        return 0;
 
     } else {
         cout<< "Unrecognized type '" << argv[1]<<"'"<<endl;

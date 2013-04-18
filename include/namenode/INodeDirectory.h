@@ -28,7 +28,7 @@ class INodeDirectory : public INode
         inline vector<shared_ptr<INode>>& getChildren() {
             return _children;
         }
-        virtual inline bool isDirectory() {return true;}
+        bool isDirectory() {return true;}
 
         shared_ptr<INode> addChild(shared_ptr<INode>, bool);
 

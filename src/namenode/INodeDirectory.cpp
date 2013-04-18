@@ -183,7 +183,7 @@ INode* INodeDirectory::findChild(string path) {
 
 // print out for test.
 void INodeDirectory::print(bool recursive) {
-    cout<<"\n"+this->getPath()+" : "<< this->getPermission()<<endl;
+    cout<<"\n"+this->getPath()+" : "<< this->getPermission()->toString()<<endl;
 
     vector<shared_ptr<INode>>::iterator iter;
 

@@ -19,7 +19,7 @@ FSEditLog::~FSEditLog(){
 
 
 void FSEditLog::open(OpenMode mode) {
-    string file = Config::get("pfs,editLog,path");
+    string file = Config::get("dfs.editLog.path");
 
     try{
 

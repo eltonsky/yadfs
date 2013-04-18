@@ -11,6 +11,7 @@
 #include "DataNodeProtocol.h"
 #include "ClientProtocol.h"
 #include "ipc/Server.h"
+#include "FSNameSystem.h"
 
 class NameNode : public DataNodeProtocol, public ClientProtocol {
 
@@ -22,17 +23,14 @@ public:
 
         return instance;
     }
-
-    NameNode();
     ~NameNode();
 
+    void loadNameSpace();
+    void saveNameSpace();
     void start();
-
     void close();
 
-
     inline IPC::Server* getRpcServer() {return &_rpcServer;}
-
 
     virtual shared_ptr<Writable> create(shared_ptr<StringWritable> path,
                                             shared_ptr<IntWritable> rep,
@@ -43,9 +41,9 @@ public:
     private:
 
         IPC::Server _rpcServer;
+        FSNameSystem& _fssystem = FSNameSystem::getFSNamesystem();
 
-
-
+        NameNode();
         NameNode(NameNode const&);
         void operator=(NameNode const&);
 
