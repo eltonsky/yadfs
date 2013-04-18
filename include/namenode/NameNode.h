@@ -31,6 +31,7 @@ public:
     void close();
 
     inline IPC::Server* getRpcServer() {return &_rpcServer;}
+    inline FSNameSystem& getNameSystem() {return _fssystem;}
 
     virtual shared_ptr<Writable> create(shared_ptr<StringWritable> path,
                                             shared_ptr<IntWritable> rep,

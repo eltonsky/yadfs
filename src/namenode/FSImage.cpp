@@ -32,6 +32,8 @@ void FSImage::loadImage() {
     INodeDirectory* parent;
     INode* child;
 
+    Log::write(INFO, "FSImage::loadImage : start loading...\n");
+
     try{
         imgStream.open(_imageFile.c_str(), ios::binary | ios::ate);
         long fileSize = imgStream.tellg();
@@ -51,6 +53,9 @@ void FSImage::loadImage() {
 
             imgStream.read(reinterpret_cast<char*>(&_genStamp),
                             sizeof(_genStamp));
+
+            Log::write(DEBUG, "<img version:%f> <ns id:%d> <num files:%d> <gen stamp:%ld>\n",
+                        _imgVersion, _namespaceId, _numFiles, _genStamp);
 
             if (imgStream.good()) {
 
@@ -97,7 +102,7 @@ void FSImage::loadImage() {
                     }
 
                     if (child == NULL) {
-                        Log::write(ERROR, "failed to inert INode %s\n",
+                        Log::write(ERROR, "failed to load INode %s\n",
                                    current->getPath().c_str());
                         return;
                     }
@@ -126,7 +131,7 @@ void FSImage::loadImage() {
         }
 
     }catch(exception& exp){
-        Log::write(ERROR, "FSImage::loadImage() : %s",
+        Log::write(ERROR, "FSImage::loadImage() : %s\n",
                    exp.what());
 
         if(imgStream.is_open())

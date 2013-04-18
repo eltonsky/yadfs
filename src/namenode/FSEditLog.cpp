@@ -152,7 +152,7 @@ void FSEditLog::loadEdits() {
                     newNode->addBlock(blk);
                 }
 
-                shared_ptr<Permission> perm;
+                shared_ptr<Permission> perm = make_shared<Permission>();
                 perm->readFields(_editIStream.get());
                 newNode->setPermission(perm);
 
@@ -171,7 +171,7 @@ void FSEditLog::loadEdits() {
                 break;
             }
             default:
-                Log::write(ERROR, "invalid opcode.");
+                Log::write(ERROR, "Invalid opcode %d.\n", opcode);
         }
 
 
