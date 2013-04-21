@@ -34,6 +34,8 @@ class FSImage
         void saveINodeWrap(INodeDirectory*, ofstream*);
         void addFile(shared_ptr<INode>, bool protect, bool inheritPerm);
         void replaceRoot(shared_ptr<INode>);
+        void setReady(bool state);
+        bool getReady();
 
 
         inline shared_ptr<INodeDirectory> getRoot() { return _root; }
@@ -75,7 +77,7 @@ class FSImage
         std::mutex _m_ready;
         std::condition_variable _m_cond_ready;
 
-        void _waitForReady();
+        bool _waitForReady();
 };
 
 #endif // FSIMAGE_H

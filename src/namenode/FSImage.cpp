@@ -28,6 +28,7 @@ FSImage::~FSImage()
 /* load image file to in mem struct
 */
 void FSImage::loadImage() {
+
     ifstream imgStream;
     INodeDirectory* parent;
     INode* child;
@@ -144,13 +145,23 @@ void FSImage::loadImage() {
         imgStream.close();
 
     //mark image as ready
-    _m_ready.lock();
-
-    _ready = true;
-
-    _m_ready.unlock();
+    setReady(true);
 
     _m_cond_ready.notify_all();
+}
+
+
+void FSImage::setReady(bool state) {
+    std::unique_lock<std::mutex> ulock(_m_ready);
+
+    _ready = state;
+}
+
+
+bool FSImage::getReady() {
+    std::unique_lock<std::mutex> ulock(_m_ready);
+
+    return _ready;
 }
 
 
@@ -198,9 +209,6 @@ void FSImage::saveImage() {
 
 
 void FSImage::saveINode(INode* currNode, ofstream* ofs) {
-
-///
-cout<<currNode->getPath()<<" : "<<currNode->isDirectory() << endl;
 
     string path = currNode->getPath();
     Writable::writeString(ofs, path);
@@ -272,32 +280,41 @@ void FSImage::saveINodeWrap(INodeDirectory* currNode, ofstream* ofs){
 }
 
 
-/*wait until fsimage finished loading.*/
-void FSImage::_waitForReady() {
+/*wait until fsimage finished loading.
+ only wait for 100ms, then return error if still not
+ ready.
+*/
+bool FSImage::_waitForReady() {
     std::unique_lock<std::mutex> ulock(_m_ready);
 
-    long start = time(NULL);
-
-    while (!_ready) {
+    if(!_ready) {
       try {
 
-        _m_cond_ready.wait_for(ulock, chrono::milliseconds(100),
-                [this] { return _ready; });
+        if(_m_cond_ready.wait_for(ulock, chrono::milliseconds(100),
+                [this] { return _ready; })){
+            return true;
+        }
+        else
+            return false;
 
-        Log::write(INFO, "wait for %d for image ready...\n",
-                   time(NULL)-start);
       } catch (exception& e) {
           Log::write(ERROR, "FSImage::_waitForReady() : %s\n",e.what());
       }
     }
+
+    return false;
 }
 
 
 void FSImage::addFile(shared_ptr<INode> sNode, bool protect, bool inheritPerm) {
     INodeDirectory* parent = NULL;
 
-    if(protect)
-        _waitForReady();
+    if(protect &&
+        !_waitForReady()) {
+        Log::write(ERROR, "");
+        return;
+    }
+
 
     try{
         parent = INodeDirectory::getParent(sNode->getPath(), _root.get());
