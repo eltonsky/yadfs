@@ -21,13 +21,28 @@ DFSClient::~DFSClient()
 }
 
 
-int DFSClient::create(string path, int replication, shared_ptr<Permission> perm) {
+int DFSClient::create(string path,
+                      shared_ptr<Permission> perm,
+                      string clientName,
+                      string clientMachine,
+                      bool overwrite,
+                      bool createParent,
+                      short replication,
+                      long blockSize) {
 
     try{
         shared_ptr<StringWritable> path_ = make_shared<StringWritable>(path);
-        shared_ptr<IntWritable> rep_ = make_shared<IntWritable>(replication);
+        shared_ptr<StringWritable> clientName_ = make_shared<StringWritable>(clientName);
+        shared_ptr<StringWritable> clientMachine_ = make_shared<StringWritable>(clientMachine);
+        shared_ptr<NumWritable<bool>> overwrite_ = make_shared<NumWritable<bool>>(overwrite);
+        shared_ptr<NumWritable<bool>> createParent_ = make_shared<NumWritable<bool>>(createParent);
+        shared_ptr<NumWritable<short>> rep_ = make_shared<NumWritable<short>>(replication);
+        shared_ptr<NumWritable<long>> blockSize_ = make_shared<NumWritable<long>>(blockSize);
 
-        shared_ptr<Writable> res = _namenode.create(path_, rep_, perm);
+        shared_ptr<Writable> res = _namenode.create(path_, perm,
+                                                    clientName_, clientMachine_,
+                                                    overwrite_, createParent_,
+                                                    rep_, blockSize_);
 
         return dynamic_pointer_cast<IntWritable>(res)->get();
 
@@ -38,3 +53,14 @@ int DFSClient::create(string path, int replication, shared_ptr<Permission> perm)
         return -1;
     }
 }
+
+
+
+
+
+
+
+
+
+
+

@@ -21,6 +21,8 @@
 #include "INodeDirectory.h"
 #include "INodeFile.h"
 
+class FSNameSystem;
+
 class FSImage
 {
     public:
@@ -36,6 +38,7 @@ class FSImage
         void replaceRoot(shared_ptr<INode>);
         void setReady(bool state);
         bool getReady();
+        int deleteNode(INode*, INodeDirectory*, long modTS);
 
 
         inline shared_ptr<INodeDirectory> getRoot() { return _root; }
@@ -62,8 +65,11 @@ class FSImage
 
         inline void print(INode* node) {node->print(true);}
 
+        inline void setFSNameSystem(FSNameSystem* fssys) {_fssys = fssys;}
+
     private:
 
+        FSNameSystem* _fssys;
         float _imgVersion;
         string _imageFile;
         int _namespaceId;

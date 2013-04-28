@@ -35,6 +35,7 @@ class INode : public Writable
         virtual bool isDirectory() { return false; };
         virtual void readFields(istream*);
         virtual void write(ostream*);
+        virtual int collectDeletingBlocks(vector<shared_ptr<Block>>&)
         virtual void print(bool recursive);
 
     protected:

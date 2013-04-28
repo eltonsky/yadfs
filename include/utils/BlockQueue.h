@@ -1,6 +1,7 @@
 #ifndef BlockQueue_H
 #define BlockQueue_H
 
+#include "Precompile.h"
 #include <deque>
 #include <mutex>
 #include <condition_variable>
@@ -13,7 +14,8 @@
 
 using namespace std;
 
-template <typename T> class BlockQueue
+template <typename T>
+class BlockQueue
 {
     unsigned max_size = 0;
     const int prod_wait_time = 30;

@@ -9,7 +9,7 @@
 #include <memory>
 #include "Log.h"
 #include "RPC.h"
-#include "IntWritable.h"
+#include "NumWritable.h"
 #include "StringWritable.h"
 #include "Permission.h"
 
@@ -21,8 +21,13 @@ class ClientProtocol {
         virtual ~ClientProtocol();
 
         virtual shared_ptr<Writable> create(shared_ptr<StringWritable> path,
-                                            shared_ptr<IntWritable> rep,
-                                            shared_ptr<Permission> perm);
+                                            shared_ptr<Permission> perm,
+                                            shared_ptr<StringWritable> clientName,
+                                            shared_ptr<StringWritable> clientMachine,
+                                            shared_ptr<NumWritable<bool>> overwrite,
+                                            shared_ptr<NumWritable<bool>> createParent,
+                                            shared_ptr<NumWritable<short>> replication,
+                                            shared_ptr<NumWritable<long>> blockSize);
 
         //...
 

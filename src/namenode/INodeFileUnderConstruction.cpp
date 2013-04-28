@@ -18,6 +18,23 @@ INodeFileUnderConstruction::INodeFileUnderConstruction(string path,short rep,
 }
 
 
+INodeFileUnderConstruction(shared_ptr<Permission> perm,
+                                   short replication,
+                                   long preferredBlockSize,
+                                   long modTime,
+                                   string clientName,
+                                   string clientMachine,
+                                   shared_ptr<DataNodeDescriptor>clientNode) :
+                                   _perm(perm),
+                                   _replication(replication),
+                                   _preferredBlockSize(preferredBlockSize),
+                                   _modTime(modTime),
+                                   _clientName(clientName),
+                                   _clientMachine(clientMachine),
+                                   _clientNode(clientNode)
+                                   {}
+
+
 void INodeFileUnderConstruction::write(ostream* os) {
     Writable::writeString(os, _path);
 

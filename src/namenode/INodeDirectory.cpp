@@ -83,65 +83,49 @@ INodeDirectory* INodeDirectory::getParent(string path,
 
 }
 
-//
-///*
-//assume path.size() > 1
-//always start from root so far.
-//*/
-//INodeDirectory* INodeDirectory::findByPath(string path, vector<short> pos, INodeDirectory* root){
-//    vector<shared_ptr<INode>>::iterator iter;
-//    INodeDirectory* p = root;
-//    string partialPath;
-//
-//    for(size_t i=0; i< pos.size();i++){
-//        partialPath = path.substr(0,pos[i]);
-//
-//        INode node(partialPath);
-//
-//        p = (INodeDirectory*) p->find_child(&node);
-//
-//        if (p == NULL) {
-//            // part of the path doesn't exist
-//            Log::write(ERROR, "partial path "+partialPath+" for file "+ path +" can not be located!");
-//
-//            return NULL;
-//        }
-//    }
-//
-//    return p;
-//}
 
+/*
+assume path.size() > 1
+always start from root so far.
+*/
+INode* INodeDirectory::findByPath(string path, INodeDirectory* root){
+    if (path.size() < 1) {
+        Log::write(INFO, "INodeDirectory::findByPath : path is empty.");
+        return NULL;
 
-///*
-//change string path to vector<string> paths.
-//*/
-//INode* INodeDirectory::addChild(INode* child, bool inheritPerm) {
-//
-//    if(inheritPerm){
-//        Permission* perm = new Permission(this->getPermission());
-//        child->setPermission(perm);
-//    }
-//
-//    child->setModTime(time(NULL));
-//
-//    INode* exist = find_child(child);
-//
-//    if(exist == NULL){
-//        INode* newNode;
-//
-//        if(child->isDirectory()) {
-//            newNode = new INodeDirectory(child);
-//        } else
-//            newNode = new INodeFile((INodeFile*)child);
-//
-//        shared_ptr<INode> sChild(newNode);
-//        _children.push_back(sChild);
-//    }
-//    else
-//        return NULL;
-//
-//    return child;
-//}
+    } else if (path.size() == 1) {
+        return root;
+
+    } else {
+
+        int i=0;
+        string partialPath;
+        INodeDirectory* currParent = root;
+        INode* res = NULL;
+
+        while(i != -1) {
+            i = path.find('/',i+1);
+            if(i != -1){
+                // parent of the dest node
+                partialPath = path.substr(0,i);
+                currParent = dynamic_cast<INodeDirectory*>(currParent->findChild(partialPath));
+
+                if(currParent == NULL) {
+                    Log::write(ERROR, "partial path "+partialPath+" for file "+ path +" can not be located!");
+
+                    return NULL;
+                }
+
+            } else {
+                // got full path here
+                res = currParent->findChild(path);
+            }
+        }
+
+    }
+
+    return res;
+}
 
 
 /*
@@ -178,6 +162,22 @@ INode* INodeDirectory::findChild(string path) {
     }
 
     return NULL;
+}
+
+
+int INodeDirectory::collectDeletingBlocks(vector<shared_ptr<Block>>& blockList) {
+    int total = 1;
+
+    vector<shared_ptr<INode>>::iterator iter;
+
+    for(iter=_children.begin;iter!=_children.end();iter++) {
+        total += iter->collectDeletingBlocks(blockList);
+    }
+
+    // remove all children after add their blocks to list.
+    _children.clear();
+
+    return total;
 }
 
 

@@ -144,13 +144,14 @@ void FSImage::loadImage() {
     if(imgStream.is_open())
         imgStream.close();
 
-    //mark image as ready
+    //set image as ready
     setReady(true);
 
     _m_cond_ready.notify_all();
 }
 
 
+// set when image is loaded (after fs init)
 void FSImage::setReady(bool state) {
     std::unique_lock<std::mutex> ulock(_m_ready);
 
@@ -281,21 +282,23 @@ void FSImage::saveINodeWrap(INodeDirectory* currNode, ofstream* ofs){
 
 
 /*wait until fsimage finished loading.
- only wait for 100ms, then return error if still not
+ only wait for 500ms, then return error if still not
  ready.
 */
 bool FSImage::_waitForReady() {
     std::unique_lock<std::mutex> ulock(_m_ready);
 
-    if(!_ready) {
+    int wait_times = 5;
+
+    while(!_ready && wait_times > 0) {
       try {
 
         if(_m_cond_ready.wait_for(ulock, chrono::milliseconds(100),
                 [this] { return _ready; })){
             return true;
         }
-        else
-            return false;
+
+        wait_times--;
 
       } catch (exception& e) {
           Log::write(ERROR, "FSImage::_waitForReady() : %s\n",e.what());
@@ -311,7 +314,8 @@ void FSImage::addFile(shared_ptr<INode> sNode, bool protect, bool inheritPerm) {
 
     if(protect &&
         !_waitForReady()) {
-        Log::write(ERROR, "");
+        Log::write(ERROR,
+                   "File system image is still loading, please try later ...");
         return;
     }
 
@@ -332,6 +336,67 @@ void FSImage::addFile(shared_ptr<INode> sNode, bool protect, bool inheritPerm) {
     }
 
 }
+
+
+// return total of files to be deleted.
+int FSImage::deleteNode(INode* node, INodeDirectory* parent, long modTimeStamp) {
+    vector<shared_ptr<INode>>::iterator iter;
+
+    iter = find(parent->getChildren().begin(), parent->getChildren().end(), *node);
+
+//    for(iter = parent->getChildren().begin();
+//        iter != parent->getChildren().end(); iter++) {
+//
+//        if(iter->get() == node) {
+//            parent->getChildren().erase(iter);
+//            Log::write(INFO, "deleted node : %s from parent : %s",
+//                       node->toString(), parent->toString());
+//            return 0;
+//        }
+//    }
+
+    if(iter != parent->getChildren().end()) {
+        //collect to be deleting blocks list
+        vector<shared_ptr<Block>> delBlockList;
+
+        int delFileCount = node->collectDeletingBlocks(delBlockList);
+
+        parent->getChildren().erase(iter);
+
+        Log::write(INFO, "deleted node : %s from parent : %s",
+                       node->toString(), parent->toString());
+
+        //set parent modified ts
+        parent->setModTime(modTimeStamp);
+
+        // queue deleting block list; will be picked up on HB.
+        _fssys->removeBlocks(delBlockList);
+
+        return delFileCount;
+    }
+
+
+    Log::write(INFO, "Not delete : can not find node : %s from parent : %s",
+                       node->toString(), parent->toString());
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

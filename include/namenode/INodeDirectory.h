@@ -23,20 +23,25 @@ class INodeDirectory : public INode
         INodeDirectory(INode*);
         INodeDirectory(INodeDirectory&);
         INodeDirectory& operator = (INodeDirectory& );
-        virtual ~INodeDirectory();
+        ~INodeDirectory();
 
         inline vector<shared_ptr<INode>>& getChildren() {
             return _children;
         }
+
         bool isDirectory() {return true;}
 
         shared_ptr<INode> addChild(shared_ptr<INode>, bool);
 
-        static INodeDirectory* getParent(string path,
-                                            INodeDirectory* root);
         INode* findChild(string path);
 
+        int collectDeletingBlocks(vector<shared_ptr<Block>>&);
+
         void print(bool);
+
+        static INodeDirectory* getParent(string path,
+                                            INodeDirectory* root);
+        static INode* findByPath(string path, INodeDirectory*);
 
     protected:
 

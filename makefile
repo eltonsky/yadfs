@@ -40,9 +40,9 @@ OBJDIR_RELEASE = obj/Release
 DEP_RELEASE = 
 OUT_RELEASE = bin/Release/yadfs
 
-OBJ_DEBUG = $(OBJDIR_DEBUG)/src/ipc/Call.o $(OBJDIR_DEBUG)/src/ipc/Server.o $(OBJDIR_DEBUG)/src/ipc/Responder.o $(OBJDIR_DEBUG)/src/ipc/RPC.o $(OBJDIR_DEBUG)/src/ipc/Method.o $(OBJDIR_DEBUG)/src/ipc/Listener.o $(OBJDIR_DEBUG)/src/ipc/Invocation.o $(OBJDIR_DEBUG)/src/ipc/Handler.o $(OBJDIR_DEBUG)/src/ipc/Connection.o $(OBJDIR_DEBUG)/src/ipc/Client.o $(OBJDIR_DEBUG)/src/lib/tinyxml2.o $(OBJDIR_DEBUG)/src/io/Writable.o $(OBJDIR_DEBUG)/src/io/StringWritable.o $(OBJDIR_DEBUG)/src/io/MethodWritable.o $(OBJDIR_DEBUG)/src/io/IntWritable.o $(OBJDIR_DEBUG)/src/fs/DFSClient.o $(OBJDIR_DEBUG)/src/datanode/DataNode.o $(OBJDIR_DEBUG)/src/core/Precompile.o $(OBJDIR_DEBUG)/src/core/Permission.o $(OBJDIR_DEBUG)/src/namenode/NameNode.o $(OBJDIR_DEBUG)/src/utils/Utils.o $(OBJDIR_DEBUG)/src/utils/Log.o $(OBJDIR_DEBUG)/src/utils/Config.o $(OBJDIR_DEBUG)/src/utils/BlockQueue.o $(OBJDIR_DEBUG)/src/test/Test2.o $(OBJDIR_DEBUG)/src/test/Test1.o $(OBJDIR_DEBUG)/src/protocol/DataNodeProtocol.o $(OBJDIR_DEBUG)/src/protocol/ClientProtocol.o $(OBJDIR_DEBUG)/main.o $(OBJDIR_DEBUG)/src/namenode/INodeFileUnderConstruction.o $(OBJDIR_DEBUG)/src/namenode/INodeFile.o $(OBJDIR_DEBUG)/src/namenode/INodeDirectory.o $(OBJDIR_DEBUG)/src/namenode/INode.o $(OBJDIR_DEBUG)/src/namenode/FSNameSystem.o $(OBJDIR_DEBUG)/src/namenode/FSImage.o $(OBJDIR_DEBUG)/src/namenode/FSEditLog.o $(OBJDIR_DEBUG)/src/namenode/Block.o
+OBJ_DEBUG = $(OBJDIR_DEBUG)/src/ipc/Client.o $(OBJDIR_DEBUG)/src/lib/tinyxml2.o $(OBJDIR_DEBUG)/src/ipc/Server.o $(OBJDIR_DEBUG)/src/ipc/Responder.o $(OBJDIR_DEBUG)/src/ipc/RPC.o $(OBJDIR_DEBUG)/src/ipc/Method.o $(OBJDIR_DEBUG)/src/ipc/Listener.o $(OBJDIR_DEBUG)/src/ipc/Invocation.o $(OBJDIR_DEBUG)/src/ipc/Handler.o $(OBJDIR_DEBUG)/src/ipc/Connection.o $(OBJDIR_DEBUG)/src/namenode/Block.o $(OBJDIR_DEBUG)/src/ipc/Call.o $(OBJDIR_DEBUG)/src/io/Writable.o $(OBJDIR_DEBUG)/src/io/StringWritable.o $(OBJDIR_DEBUG)/src/io/MethodWritable.o $(OBJDIR_DEBUG)/src/io/IntWritable.o $(OBJDIR_DEBUG)/src/fs/DFSClient.o $(OBJDIR_DEBUG)/src/datanode/DataNode.o $(OBJDIR_DEBUG)/src/core/Precompile.o $(OBJDIR_DEBUG)/src/core/Permission.o $(OBJDIR_DEBUG)/src/namenode/NameNode.o $(OBJDIR_DEBUG)/src/utils/Utils.o $(OBJDIR_DEBUG)/src/utils/NameNodeInstrumentation.o $(OBJDIR_DEBUG)/src/utils/Log.o $(OBJDIR_DEBUG)/src/utils/Config.o $(OBJDIR_DEBUG)/src/utils/BlockQueue.o $(OBJDIR_DEBUG)/src/test/Test2.o $(OBJDIR_DEBUG)/src/test/Test1.o $(OBJDIR_DEBUG)/src/protocol/DataNodeProtocol.o $(OBJDIR_DEBUG)/src/protocol/ClientProtocol.o $(OBJDIR_DEBUG)/main.o $(OBJDIR_DEBUG)/src/namenode/LeaseManager.o $(OBJDIR_DEBUG)/src/namenode/INodeFileUnderConstruction.o $(OBJDIR_DEBUG)/src/namenode/INodeFile.o $(OBJDIR_DEBUG)/src/namenode/INodeDirectory.o $(OBJDIR_DEBUG)/src/namenode/INode.o $(OBJDIR_DEBUG)/src/namenode/FSNameSystem.o $(OBJDIR_DEBUG)/src/namenode/FSImage.o $(OBJDIR_DEBUG)/src/namenode/FSEditLog.o
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)/src/ipc/Call.o $(OBJDIR_RELEASE)/src/ipc/Server.o $(OBJDIR_RELEASE)/src/ipc/Responder.o $(OBJDIR_RELEASE)/src/ipc/RPC.o $(OBJDIR_RELEASE)/src/ipc/Method.o $(OBJDIR_RELEASE)/src/ipc/Listener.o $(OBJDIR_RELEASE)/src/ipc/Invocation.o $(OBJDIR_RELEASE)/src/ipc/Handler.o $(OBJDIR_RELEASE)/src/ipc/Connection.o $(OBJDIR_RELEASE)/src/ipc/Client.o $(OBJDIR_RELEASE)/src/lib/tinyxml2.o $(OBJDIR_RELEASE)/src/io/Writable.o $(OBJDIR_RELEASE)/src/io/StringWritable.o $(OBJDIR_RELEASE)/src/io/MethodWritable.o $(OBJDIR_RELEASE)/src/io/IntWritable.o $(OBJDIR_RELEASE)/src/fs/DFSClient.o $(OBJDIR_RELEASE)/src/datanode/DataNode.o $(OBJDIR_RELEASE)/src/core/Precompile.o $(OBJDIR_RELEASE)/src/core/Permission.o $(OBJDIR_RELEASE)/src/namenode/NameNode.o $(OBJDIR_RELEASE)/src/utils/Utils.o $(OBJDIR_RELEASE)/src/utils/Log.o $(OBJDIR_RELEASE)/src/utils/Config.o $(OBJDIR_RELEASE)/src/utils/BlockQueue.o $(OBJDIR_RELEASE)/src/test/Test2.o $(OBJDIR_RELEASE)/src/test/Test1.o $(OBJDIR_RELEASE)/src/protocol/DataNodeProtocol.o $(OBJDIR_RELEASE)/src/protocol/ClientProtocol.o $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/src/namenode/INodeFileUnderConstruction.o $(OBJDIR_RELEASE)/src/namenode/INodeFile.o $(OBJDIR_RELEASE)/src/namenode/INodeDirectory.o $(OBJDIR_RELEASE)/src/namenode/INode.o $(OBJDIR_RELEASE)/src/namenode/FSNameSystem.o $(OBJDIR_RELEASE)/src/namenode/FSImage.o $(OBJDIR_RELEASE)/src/namenode/FSEditLog.o $(OBJDIR_RELEASE)/src/namenode/Block.o
+OBJ_RELEASE = $(OBJDIR_RELEASE)/src/ipc/Client.o $(OBJDIR_RELEASE)/src/lib/tinyxml2.o $(OBJDIR_RELEASE)/src/ipc/Server.o $(OBJDIR_RELEASE)/src/ipc/Responder.o $(OBJDIR_RELEASE)/src/ipc/RPC.o $(OBJDIR_RELEASE)/src/ipc/Method.o $(OBJDIR_RELEASE)/src/ipc/Listener.o $(OBJDIR_RELEASE)/src/ipc/Invocation.o $(OBJDIR_RELEASE)/src/ipc/Handler.o $(OBJDIR_RELEASE)/src/ipc/Connection.o $(OBJDIR_RELEASE)/src/namenode/Block.o $(OBJDIR_RELEASE)/src/ipc/Call.o $(OBJDIR_RELEASE)/src/io/Writable.o $(OBJDIR_RELEASE)/src/io/StringWritable.o $(OBJDIR_RELEASE)/src/io/MethodWritable.o $(OBJDIR_RELEASE)/src/io/IntWritable.o $(OBJDIR_RELEASE)/src/fs/DFSClient.o $(OBJDIR_RELEASE)/src/datanode/DataNode.o $(OBJDIR_RELEASE)/src/core/Precompile.o $(OBJDIR_RELEASE)/src/core/Permission.o $(OBJDIR_RELEASE)/src/namenode/NameNode.o $(OBJDIR_RELEASE)/src/utils/Utils.o $(OBJDIR_RELEASE)/src/utils/NameNodeInstrumentation.o $(OBJDIR_RELEASE)/src/utils/Log.o $(OBJDIR_RELEASE)/src/utils/Config.o $(OBJDIR_RELEASE)/src/utils/BlockQueue.o $(OBJDIR_RELEASE)/src/test/Test2.o $(OBJDIR_RELEASE)/src/test/Test1.o $(OBJDIR_RELEASE)/src/protocol/DataNodeProtocol.o $(OBJDIR_RELEASE)/src/protocol/ClientProtocol.o $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/src/namenode/LeaseManager.o $(OBJDIR_RELEASE)/src/namenode/INodeFileUnderConstruction.o $(OBJDIR_RELEASE)/src/namenode/INodeFile.o $(OBJDIR_RELEASE)/src/namenode/INodeDirectory.o $(OBJDIR_RELEASE)/src/namenode/INode.o $(OBJDIR_RELEASE)/src/namenode/FSNameSystem.o $(OBJDIR_RELEASE)/src/namenode/FSImage.o $(OBJDIR_RELEASE)/src/namenode/FSEditLog.o
 
 all: debug release
 
@@ -52,11 +52,11 @@ before_debug:
 	test -d bin/Debug || mkdir -p bin/Debug
 	test -d $(OBJDIR_DEBUG)/src/ipc || mkdir -p $(OBJDIR_DEBUG)/src/ipc
 	test -d $(OBJDIR_DEBUG)/src/lib || mkdir -p $(OBJDIR_DEBUG)/src/lib
+	test -d $(OBJDIR_DEBUG)/src/namenode || mkdir -p $(OBJDIR_DEBUG)/src/namenode
 	test -d $(OBJDIR_DEBUG)/src/io || mkdir -p $(OBJDIR_DEBUG)/src/io
 	test -d $(OBJDIR_DEBUG)/src/fs || mkdir -p $(OBJDIR_DEBUG)/src/fs
 	test -d $(OBJDIR_DEBUG)/src/datanode || mkdir -p $(OBJDIR_DEBUG)/src/datanode
 	test -d $(OBJDIR_DEBUG)/src/core || mkdir -p $(OBJDIR_DEBUG)/src/core
-	test -d $(OBJDIR_DEBUG)/src/namenode || mkdir -p $(OBJDIR_DEBUG)/src/namenode
 	test -d $(OBJDIR_DEBUG)/src/utils || mkdir -p $(OBJDIR_DEBUG)/src/utils
 	test -d $(OBJDIR_DEBUG)/src/test || mkdir -p $(OBJDIR_DEBUG)/src/test
 	test -d $(OBJDIR_DEBUG)/src/protocol || mkdir -p $(OBJDIR_DEBUG)/src/protocol
@@ -69,8 +69,11 @@ debug: before_debug out_debug after_debug
 out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG)
 	$(LD) $(LIBDIR_DEBUG) -o $(OUT_DEBUG) $(OBJ_DEBUG)  $(LDFLAGS_DEBUG) $(LIB_DEBUG)
 
-$(OBJDIR_DEBUG)/src/ipc/Call.o: src/ipc/Call.cpp
-	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/ipc/Call.cpp -o $(OBJDIR_DEBUG)/src/ipc/Call.o
+$(OBJDIR_DEBUG)/src/ipc/Client.o: src/ipc/Client.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/ipc/Client.cpp -o $(OBJDIR_DEBUG)/src/ipc/Client.o
+
+$(OBJDIR_DEBUG)/src/lib/tinyxml2.o: src/lib/tinyxml2.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/lib/tinyxml2.cpp -o $(OBJDIR_DEBUG)/src/lib/tinyxml2.o
 
 $(OBJDIR_DEBUG)/src/ipc/Server.o: src/ipc/Server.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/ipc/Server.cpp -o $(OBJDIR_DEBUG)/src/ipc/Server.o
@@ -96,11 +99,11 @@ $(OBJDIR_DEBUG)/src/ipc/Handler.o: src/ipc/Handler.cpp
 $(OBJDIR_DEBUG)/src/ipc/Connection.o: src/ipc/Connection.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/ipc/Connection.cpp -o $(OBJDIR_DEBUG)/src/ipc/Connection.o
 
-$(OBJDIR_DEBUG)/src/ipc/Client.o: src/ipc/Client.cpp
-	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/ipc/Client.cpp -o $(OBJDIR_DEBUG)/src/ipc/Client.o
+$(OBJDIR_DEBUG)/src/namenode/Block.o: src/namenode/Block.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/namenode/Block.cpp -o $(OBJDIR_DEBUG)/src/namenode/Block.o
 
-$(OBJDIR_DEBUG)/src/lib/tinyxml2.o: src/lib/tinyxml2.cpp
-	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/lib/tinyxml2.cpp -o $(OBJDIR_DEBUG)/src/lib/tinyxml2.o
+$(OBJDIR_DEBUG)/src/ipc/Call.o: src/ipc/Call.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/ipc/Call.cpp -o $(OBJDIR_DEBUG)/src/ipc/Call.o
 
 $(OBJDIR_DEBUG)/src/io/Writable.o: src/io/Writable.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/io/Writable.cpp -o $(OBJDIR_DEBUG)/src/io/Writable.o
@@ -132,6 +135,9 @@ $(OBJDIR_DEBUG)/src/namenode/NameNode.o: src/namenode/NameNode.cpp
 $(OBJDIR_DEBUG)/src/utils/Utils.o: src/utils/Utils.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/utils/Utils.cpp -o $(OBJDIR_DEBUG)/src/utils/Utils.o
 
+$(OBJDIR_DEBUG)/src/utils/NameNodeInstrumentation.o: src/utils/NameNodeInstrumentation.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/utils/NameNodeInstrumentation.cpp -o $(OBJDIR_DEBUG)/src/utils/NameNodeInstrumentation.o
+
 $(OBJDIR_DEBUG)/src/utils/Log.o: src/utils/Log.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/utils/Log.cpp -o $(OBJDIR_DEBUG)/src/utils/Log.o
 
@@ -156,6 +162,9 @@ $(OBJDIR_DEBUG)/src/protocol/ClientProtocol.o: src/protocol/ClientProtocol.cpp
 $(OBJDIR_DEBUG)/main.o: main.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c main.cpp -o $(OBJDIR_DEBUG)/main.o
 
+$(OBJDIR_DEBUG)/src/namenode/LeaseManager.o: src/namenode/LeaseManager.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/namenode/LeaseManager.cpp -o $(OBJDIR_DEBUG)/src/namenode/LeaseManager.o
+
 $(OBJDIR_DEBUG)/src/namenode/INodeFileUnderConstruction.o: src/namenode/INodeFileUnderConstruction.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/namenode/INodeFileUnderConstruction.cpp -o $(OBJDIR_DEBUG)/src/namenode/INodeFileUnderConstruction.o
 
@@ -177,19 +186,16 @@ $(OBJDIR_DEBUG)/src/namenode/FSImage.o: src/namenode/FSImage.cpp
 $(OBJDIR_DEBUG)/src/namenode/FSEditLog.o: src/namenode/FSEditLog.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/namenode/FSEditLog.cpp -o $(OBJDIR_DEBUG)/src/namenode/FSEditLog.o
 
-$(OBJDIR_DEBUG)/src/namenode/Block.o: src/namenode/Block.cpp
-	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c src/namenode/Block.cpp -o $(OBJDIR_DEBUG)/src/namenode/Block.o
-
 clean_debug: 
 	rm -f $(OBJ_DEBUG) $(OUT_DEBUG)
 	rm -rf bin/Debug
 	rm -rf $(OBJDIR_DEBUG)/src/ipc
 	rm -rf $(OBJDIR_DEBUG)/src/lib
+	rm -rf $(OBJDIR_DEBUG)/src/namenode
 	rm -rf $(OBJDIR_DEBUG)/src/io
 	rm -rf $(OBJDIR_DEBUG)/src/fs
 	rm -rf $(OBJDIR_DEBUG)/src/datanode
 	rm -rf $(OBJDIR_DEBUG)/src/core
-	rm -rf $(OBJDIR_DEBUG)/src/namenode
 	rm -rf $(OBJDIR_DEBUG)/src/utils
 	rm -rf $(OBJDIR_DEBUG)/src/test
 	rm -rf $(OBJDIR_DEBUG)/src/protocol
@@ -199,11 +205,11 @@ before_release:
 	test -d bin/Release || mkdir -p bin/Release
 	test -d $(OBJDIR_RELEASE)/src/ipc || mkdir -p $(OBJDIR_RELEASE)/src/ipc
 	test -d $(OBJDIR_RELEASE)/src/lib || mkdir -p $(OBJDIR_RELEASE)/src/lib
+	test -d $(OBJDIR_RELEASE)/src/namenode || mkdir -p $(OBJDIR_RELEASE)/src/namenode
 	test -d $(OBJDIR_RELEASE)/src/io || mkdir -p $(OBJDIR_RELEASE)/src/io
 	test -d $(OBJDIR_RELEASE)/src/fs || mkdir -p $(OBJDIR_RELEASE)/src/fs
 	test -d $(OBJDIR_RELEASE)/src/datanode || mkdir -p $(OBJDIR_RELEASE)/src/datanode
 	test -d $(OBJDIR_RELEASE)/src/core || mkdir -p $(OBJDIR_RELEASE)/src/core
-	test -d $(OBJDIR_RELEASE)/src/namenode || mkdir -p $(OBJDIR_RELEASE)/src/namenode
 	test -d $(OBJDIR_RELEASE)/src/utils || mkdir -p $(OBJDIR_RELEASE)/src/utils
 	test -d $(OBJDIR_RELEASE)/src/test || mkdir -p $(OBJDIR_RELEASE)/src/test
 	test -d $(OBJDIR_RELEASE)/src/protocol || mkdir -p $(OBJDIR_RELEASE)/src/protocol
@@ -216,8 +222,11 @@ release: before_release out_release after_release
 out_release: before_release $(OBJ_RELEASE) $(DEP_RELEASE)
 	$(LD) $(LIBDIR_RELEASE) -o $(OUT_RELEASE) $(OBJ_RELEASE)  $(LDFLAGS_RELEASE) $(LIB_RELEASE)
 
-$(OBJDIR_RELEASE)/src/ipc/Call.o: src/ipc/Call.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/ipc/Call.cpp -o $(OBJDIR_RELEASE)/src/ipc/Call.o
+$(OBJDIR_RELEASE)/src/ipc/Client.o: src/ipc/Client.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/ipc/Client.cpp -o $(OBJDIR_RELEASE)/src/ipc/Client.o
+
+$(OBJDIR_RELEASE)/src/lib/tinyxml2.o: src/lib/tinyxml2.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/lib/tinyxml2.cpp -o $(OBJDIR_RELEASE)/src/lib/tinyxml2.o
 
 $(OBJDIR_RELEASE)/src/ipc/Server.o: src/ipc/Server.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/ipc/Server.cpp -o $(OBJDIR_RELEASE)/src/ipc/Server.o
@@ -243,11 +252,11 @@ $(OBJDIR_RELEASE)/src/ipc/Handler.o: src/ipc/Handler.cpp
 $(OBJDIR_RELEASE)/src/ipc/Connection.o: src/ipc/Connection.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/ipc/Connection.cpp -o $(OBJDIR_RELEASE)/src/ipc/Connection.o
 
-$(OBJDIR_RELEASE)/src/ipc/Client.o: src/ipc/Client.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/ipc/Client.cpp -o $(OBJDIR_RELEASE)/src/ipc/Client.o
+$(OBJDIR_RELEASE)/src/namenode/Block.o: src/namenode/Block.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/namenode/Block.cpp -o $(OBJDIR_RELEASE)/src/namenode/Block.o
 
-$(OBJDIR_RELEASE)/src/lib/tinyxml2.o: src/lib/tinyxml2.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/lib/tinyxml2.cpp -o $(OBJDIR_RELEASE)/src/lib/tinyxml2.o
+$(OBJDIR_RELEASE)/src/ipc/Call.o: src/ipc/Call.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/ipc/Call.cpp -o $(OBJDIR_RELEASE)/src/ipc/Call.o
 
 $(OBJDIR_RELEASE)/src/io/Writable.o: src/io/Writable.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/io/Writable.cpp -o $(OBJDIR_RELEASE)/src/io/Writable.o
@@ -279,6 +288,9 @@ $(OBJDIR_RELEASE)/src/namenode/NameNode.o: src/namenode/NameNode.cpp
 $(OBJDIR_RELEASE)/src/utils/Utils.o: src/utils/Utils.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/utils/Utils.cpp -o $(OBJDIR_RELEASE)/src/utils/Utils.o
 
+$(OBJDIR_RELEASE)/src/utils/NameNodeInstrumentation.o: src/utils/NameNodeInstrumentation.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/utils/NameNodeInstrumentation.cpp -o $(OBJDIR_RELEASE)/src/utils/NameNodeInstrumentation.o
+
 $(OBJDIR_RELEASE)/src/utils/Log.o: src/utils/Log.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/utils/Log.cpp -o $(OBJDIR_RELEASE)/src/utils/Log.o
 
@@ -303,6 +315,9 @@ $(OBJDIR_RELEASE)/src/protocol/ClientProtocol.o: src/protocol/ClientProtocol.cpp
 $(OBJDIR_RELEASE)/main.o: main.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c main.cpp -o $(OBJDIR_RELEASE)/main.o
 
+$(OBJDIR_RELEASE)/src/namenode/LeaseManager.o: src/namenode/LeaseManager.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/namenode/LeaseManager.cpp -o $(OBJDIR_RELEASE)/src/namenode/LeaseManager.o
+
 $(OBJDIR_RELEASE)/src/namenode/INodeFileUnderConstruction.o: src/namenode/INodeFileUnderConstruction.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/namenode/INodeFileUnderConstruction.cpp -o $(OBJDIR_RELEASE)/src/namenode/INodeFileUnderConstruction.o
 
@@ -324,19 +339,16 @@ $(OBJDIR_RELEASE)/src/namenode/FSImage.o: src/namenode/FSImage.cpp
 $(OBJDIR_RELEASE)/src/namenode/FSEditLog.o: src/namenode/FSEditLog.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/namenode/FSEditLog.cpp -o $(OBJDIR_RELEASE)/src/namenode/FSEditLog.o
 
-$(OBJDIR_RELEASE)/src/namenode/Block.o: src/namenode/Block.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c src/namenode/Block.cpp -o $(OBJDIR_RELEASE)/src/namenode/Block.o
-
 clean_release: 
 	rm -f $(OBJ_RELEASE) $(OUT_RELEASE)
 	rm -rf bin/Release
 	rm -rf $(OBJDIR_RELEASE)/src/ipc
 	rm -rf $(OBJDIR_RELEASE)/src/lib
+	rm -rf $(OBJDIR_RELEASE)/src/namenode
 	rm -rf $(OBJDIR_RELEASE)/src/io
 	rm -rf $(OBJDIR_RELEASE)/src/fs
 	rm -rf $(OBJDIR_RELEASE)/src/datanode
 	rm -rf $(OBJDIR_RELEASE)/src/core
-	rm -rf $(OBJDIR_RELEASE)/src/namenode
 	rm -rf $(OBJDIR_RELEASE)/src/utils
 	rm -rf $(OBJDIR_RELEASE)/src/test
 	rm -rf $(OBJDIR_RELEASE)/src/protocol

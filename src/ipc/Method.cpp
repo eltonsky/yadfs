@@ -21,8 +21,14 @@ shared_ptr<Writable> Method::call(string c, string m, vector<shared_ptr<Writable
 
             return NameNode::getInstance().create(
                             dynamic_pointer_cast<StringWritable>(params[0]),
-                             dynamic_pointer_cast<IntWritable>(params[1]),
-                             dynamic_pointer_cast<Permission>(params[2]));
+                            dynamic_pointer_cast<Permission>(params[1]),
+                            dynamic_pointer_cast<StringWritable>(params[2]),
+                            dynamic_pointer_cast<StringWritable>(params[3]),
+                            dynamic_pointer_cast<NumWritable<bool>>(params[4]),
+                            dynamic_pointer_cast<NumWritable<bool>>(params[5]),
+                            dynamic_pointer_cast<NumWritable<short>>(params[6]),
+                            dynamic_pointer_cast<NumWritable<long>>(params[7]));
+
         }
     }
 

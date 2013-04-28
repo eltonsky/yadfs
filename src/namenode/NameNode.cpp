@@ -37,12 +37,33 @@ void NameNode::saveNameSpace() {
 /// RPC calls
 
 shared_ptr<Writable> NameNode::create(shared_ptr<StringWritable> path,
-                                            shared_ptr<IntWritable> rep,
-                                            shared_ptr<Permission> perm) {
+                                    shared_ptr<Permission> perm,
+                                    shared_ptr<StringWritable> clientName,
+                                    shared_ptr<StringWritable> clientMachine,
+                                    shared_ptr<NumWritable<bool>> overwrite,
+                                    shared_ptr<NumWritable<bool>> createParent,
+                                    shared_ptr<NumWritable<short>> replication,
+                                    shared_ptr<NumWritable<long>> blockSize) {
 
-    int res = 12345;
+    int res = _fssystem.startFile(path, perm, clientName, clientMachine,
+                        overwrite, createParent, replication,
+                        blockSize);
+
+    /// TODO: increase metrics
 
     return make_shared<IntWritable>(res);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 

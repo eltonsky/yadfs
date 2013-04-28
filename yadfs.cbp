@@ -54,8 +54,12 @@
 		<Unit filename="include/core/Precompile.h" />
 		<Unit filename="include/datanode/DataNode.h" />
 		<Unit filename="include/fs/DFSClient.h" />
+		<Unit filename="include/io/BoolWritable.h" />
 		<Unit filename="include/io/IntWritable.h" />
+		<Unit filename="include/io/LongWritable.h" />
 		<Unit filename="include/io/MethodWritable.h" />
+		<Unit filename="include/io/NumWritable.h" />
+		<Unit filename="include/io/ShortWritable.h" />
 		<Unit filename="include/io/StringWritable.h" />
 		<Unit filename="include/io/Writable.h" />
 		<Unit filename="include/ipc/Call.h" />
@@ -77,6 +81,7 @@
 		<Unit filename="include/namenode/INodeDirectory.h" />
 		<Unit filename="include/namenode/INodeFile.h" />
 		<Unit filename="include/namenode/INodeFileUnderConstruction.h" />
+		<Unit filename="include/namenode/LeaseManager.h" />
 		<Unit filename="include/namenode/NameNode.h" />
 		<Unit filename="include/protocol/ClientProtocol.h" />
 		<Unit filename="include/protocol/DataNodeProtocol.h" />
@@ -85,14 +90,19 @@
 		<Unit filename="include/utils/BlockQueue.h" />
 		<Unit filename="include/utils/Config.h" />
 		<Unit filename="include/utils/Log.h" />
+		<Unit filename="include/utils/NameNodeInstrumentation.h" />
 		<Unit filename="include/utils/Utils.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/core/Permission.cpp" />
 		<Unit filename="src/core/Precompile.cpp" />
 		<Unit filename="src/datanode/DataNode.cpp" />
 		<Unit filename="src/fs/DFSClient.cpp" />
+		<Unit filename="src/io/BoolWritable.cpp" />
 		<Unit filename="src/io/IntWritable.cpp" />
+		<Unit filename="src/io/LongWritable.cpp" />
 		<Unit filename="src/io/MethodWritable.cpp" />
+		<Unit filename="src/io/NumWritable.cpp" />
+		<Unit filename="src/io/ShortWritable.cpp" />
 		<Unit filename="src/io/StringWritable.cpp" />
 		<Unit filename="src/io/Writable.cpp" />
 		<Unit filename="src/ipc/Call.cpp" />
@@ -114,6 +124,7 @@
 		<Unit filename="src/namenode/INodeDirectory.cpp" />
 		<Unit filename="src/namenode/INodeFile.cpp" />
 		<Unit filename="src/namenode/INodeFileUnderConstruction.cpp" />
+		<Unit filename="src/namenode/LeaseManager.cpp" />
 		<Unit filename="src/namenode/NameNode.cpp" />
 		<Unit filename="src/protocol/ClientProtocol.cpp" />
 		<Unit filename="src/protocol/DataNodeProtocol.cpp" />
@@ -122,6 +133,7 @@
 		<Unit filename="src/utils/BlockQueue.cpp" />
 		<Unit filename="src/utils/Config.cpp" />
 		<Unit filename="src/utils/Log.cpp" />
+		<Unit filename="src/utils/NameNodeInstrumentation.cpp" />
 		<Unit filename="src/utils/Utils.cpp" />
 		<Extensions>
 			<code_completion />

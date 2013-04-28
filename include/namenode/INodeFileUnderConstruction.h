@@ -3,6 +3,7 @@
 
 #include "Permission.h"
 #include "DataNode.h"
+#include "DataNodeDescriptor.h"
 #include "INodeFile.h"
 #include <string>
 #include <vector>
@@ -16,6 +17,15 @@ class INodeFileUnderConstruction : public INodeFile
     public:
         INodeFileUnderConstruction();
         INodeFileUnderConstruction(string,short,long,long,int,int);
+        INodeFileUnderConstruction(string src,
+                                   shared_ptr<Permission>,
+                                   short replication,
+                                   long preferredBlockSize,
+                                   long modTime,
+                                   string clientName,
+                                   string clientMachine,
+                                   shared_ptr<DataNodeDescriptor>clientNode);
+
         virtual ~INodeFileUnderConstruction();
 
         inline void setPreferredBlkSize(long prefBlkSize) {_preferredBlockSize = prefBlkSize;}
@@ -36,6 +46,10 @@ class INodeFileUnderConstruction : public INodeFile
         string _clientMachine;
         int _numLocations;
         vector<shared_ptr<DataNode>> _locations;
+        shared_ptr<DataNodeDescriptor> _clientNode;
+        long _modTime;
+        shared_ptr<Permission> _perm;
+        short _replication;
 
     private:
 };

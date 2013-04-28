@@ -78,6 +78,18 @@ void INodeFile::setBlock(int index, shared_ptr<Block> blk) {
 }
 
 
+// return how many files to delete.
+int collectDeletingBlocks(vector<Block*>& blockList) {
+    vector<shared_ptr<Block>>::iterator iter;
+
+    for(iter=_blocks.begin();iter!= _blocks.end();iter++) {
+        _blockList.push_back(*iter);
+    }
+
+    return 1;
+}
+
+
 void INodeFile::readFields(istream* is) {
     INode::readFields(is);
 }

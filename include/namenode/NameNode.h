@@ -10,7 +10,7 @@
 #include "Log.h"
 #include "DataNodeProtocol.h"
 #include "ClientProtocol.h"
-#include "ipc/Server.h"
+#include "Server.h"
 #include "FSNameSystem.h"
 
 class NameNode : public DataNodeProtocol, public ClientProtocol {
@@ -33,16 +33,24 @@ public:
     inline IPC::Server* getRpcServer() {return &_rpcServer;}
     inline FSNameSystem& getNameSystem() {return _fssystem;}
 
-    virtual shared_ptr<Writable> create(shared_ptr<StringWritable> path,
-                                            shared_ptr<IntWritable> rep,
-                                            shared_ptr<Permission> perm);
 
-    /// TODO: add more functions
+    /// This is invoked by DFSClient.create from clientprotocol
+    shared_ptr<Writable> create(shared_ptr<StringWritable> path,
+                shared_ptr<Permission> perm,
+                shared_ptr<StringWritable> clientName,
+                shared_ptr<StringWritable> clientMachine,
+                shared_ptr<NumWritable<bool>> overwrite,
+                shared_ptr<NumWritable<bool>> createParent,
+                shared_ptr<NumWritable<short>> replication,
+                shared_ptr<NumWritable<long>> blockSize);
 
     private:
 
         IPC::Server _rpcServer;
         FSNameSystem& _fssystem = FSNameSystem::getFSNamesystem();
+
+        /// TODO: create metric class
+        //static NameNodeInstrumentation metrics;
 
         NameNode();
         NameNode(NameNode const&);

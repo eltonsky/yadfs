@@ -9,6 +9,7 @@
 #include <memory>
 #include "DataNodeProtocol.h"
 #include "DFSClient.h"
+#include "NumWritable.h"
 
 class Test2
 {

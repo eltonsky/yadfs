@@ -1,5 +1,5 @@
-#ifndef INTWRITABLE_H
-#define INTWRITABLE_H
+#ifndef LongWritable_H
+#define LongWritable_H
 
 #include <cstdlib>
 #include <stdio.h>
@@ -13,13 +13,13 @@
 using boost::asio::ip::tcp;
 using namespace std;
 
-class IntWritable : public Writable
+class LongWritable : public Writable
 {
     public:
-        IntWritable();
-        IntWritable(const IntWritable&);
-        IntWritable(int v);
-        ~IntWritable();
+        LongWritable();
+        LongWritable(const LongWritable&);
+        LongWritable(long v);
+        ~LongWritable();
 
         int readFields(tcp::socket * sock);
         int write(tcp::socket * sock, int start=0);
@@ -28,11 +28,11 @@ class IntWritable : public Writable
         string getClass();
         int length();
 
-        inline int get() {return _value;}
+        inline long get() {return _value;}
 
     protected:
     private:
-        int _value;
+        long _value;
 };
 
-#endif // INTWRITABLE_H
+#endif // LongWritable_H

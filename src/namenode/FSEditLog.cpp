@@ -87,8 +87,9 @@ void FSEditLog::loadEdits() {
     string clientName;
     string clientMachine;
 
-    int numOpAdd = 0, numOpClose = 0;
-//        numOpDelete = 0,
+    int numOpAdd = 0,
+        numOpClose = 0,
+        numOpDelete = 0;
 //        numOpRename = 0, numOpSetRepl = 0, numOpMkDir = 0,
 //        numOpSetPerm = 0, numOpSetOwner = 0, numOpSetGenStamp = 0,
 //        numOpTimes = 0, numOpGetDelegationToken = 0,
@@ -167,6 +168,25 @@ void FSEditLog::loadEdits() {
                 //add to namespace
                 shared_ptr<INode> pNode(newNode);
                 _fsImage->addFile(pNode,false,true);
+
+                Log::write(INFO, "loadEdits: ADD/CLOSE : %d - %s",
+                           opcode, pNode->toString());
+
+                break;
+            }
+            case OP_DELETE: {
+                numOpDelete++;
+
+                string path = Writable::readString(_editIStream.get());
+
+                long timestamp = -1;
+                _editIStream->read(reinterpret_cast<char*>(&timestamp),
+                                sizeof(timestamp));
+
+                int delCount = _fssys->deleteFile(path, timestamp);
+
+                Log::write(INFO, "loadEdits: Deleted %s - file count : %d",
+                            path, delCount);
 
                 break;
             }
@@ -253,12 +273,30 @@ void FSEditLog::logCloseFile(string path, INodeFile& newNode) {
 }
 
 
+void logDelete(string src, long timestamp) {
+    stringstream ss;
+
+    //op code
+    short op_del = OP_DELETE;
+    ss.write(reinterpret_cast<const char*>(&op_mkdir),
+              sizeof(op_del));
+
+    //path, modify time, access time
+    Writable::writeString(&ss, src);
+
+    ss.write(reinterpret_cast<const char*>(&timestamp),
+             sizeof(timestamp));
+
+    logEdit(&ss);
+}
+
+
 void FSEditLog::logMkDir(string path, INode& newNode) {
     stringstream ss;
 
     //op code
-    short op_close = OP_MKDIR;
-    ss.write((char*)&op_close, sizeof(op_close));
+    short op_mkdir = OP_MKDIR;
+    ss.write((char*)&op_mkdir, sizeof(op_mkdir));
 
     //path, modify time, access time
     Writable::writeString(&ss, newNode.getPath());

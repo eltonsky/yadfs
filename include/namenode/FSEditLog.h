@@ -20,6 +20,8 @@
 using namespace std;
 
 
+class FSNameSystem;
+
 class FSEditLog
 {
     public:
@@ -45,10 +47,13 @@ class FSEditLog
         void createEditLogFile(string file);
         void loadEdits();
 
+        inline void setFSNameSystem(FSNameSystem* fssys) {_fssys = fssys;}
+
     private:
 
         float _version;
         FSImage* _fsImage;
+        FSNameSystem* _fssys;
 
         std::mutex _m_log;
         std::condition_variable _m_cond;
